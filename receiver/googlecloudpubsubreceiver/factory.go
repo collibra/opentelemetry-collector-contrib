@@ -26,8 +26,9 @@ import (
 )
 
 const (
-	typeStr         = "googlecloudpubsub"
-	reportTransport = "pubsub"
+	typeStr              = "googlecloudpubsub"
+	reportTransport      = "pubsub"
+	reportFormatProtobuf = "protobuf"
 )
 
 func NewFactory() component.ReceiverFactory {
