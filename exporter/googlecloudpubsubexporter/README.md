@@ -9,6 +9,7 @@ The following configuration options are supported:
 * `project` (Optional): The Google Cloud Project of the topics.
 * `topic` (Required): The topic name to receive OTLP data over. The topic name should be a fully qualified resource
   name (eg: `projects/otel-project/topics/otlp`).
+* `compression` (Optional): TODO
 
 ```yaml
 exporters:
@@ -36,7 +37,8 @@ traces, metrics or logs respectively.  Each message is accompanied with the foll
 | attributes | description |
 | --- | --- |
 | ce-specversion | Follow version `1.0` of the CloudEvent spec |
-| ce-source | The source is this `/opentelemetry/collector/googlecloudpubsub/v0.27.0` exporter |
+| ce-source | The source is this `/opentelemetry/collector/googlecloudpubsub/<version>` exporter |
 | ce-id | a random `UUID` to uniquely define the message |
 | ce-type | depending on the data `org.opentelemetry.otlp.traces.v1`, `org.opentelemetry.otlp.metrics.v1` or `org.opentelemetry.otlp.logs.v1` |
-| ce-datacontenttype | the content type is `application/x-protobuf` | 
+| content-type | the content type is `application/protobuf` | 
+| compression | 
