@@ -56,10 +56,13 @@ func TestLoadConfig(t *testing.T) {
 		Timeout: 20 * time.Second,
 	}
 	customConfig.Topic = "projects/my-project/topics/otlp-topic"
+	customConfig.Compression = "gzip"
+	customConfig.Watermark.Behaviour = "earliest"
+	customConfig.Watermark.AllowedDrift = time.Hour
 	assert.Equal(t, cfg.Exporters[config.NewComponentIDWithName(typeStr, "customname")], customConfig)
 }
 
-func TestTraceConfigValidation(t *testing.T) {
+func TestTopicConfigValidation(t *testing.T) {
 	factory := NewFactory()
 	config := factory.CreateDefaultConfig().(*Config)
 	assert.Error(t, config.validate())
@@ -68,5 +71,35 @@ func TestTraceConfigValidation(t *testing.T) {
 	config.Topic = "projects/my-project/subscriptions/my-subscription"
 	assert.Error(t, config.validate())
 	config.Topic = "projects/my-project/topics/my-topic"
+	assert.NoError(t, config.validate())
+}
+
+func TestCompressionConfigValidation(t *testing.T) {
+	factory := NewFactory()
+	config := factory.CreateDefaultConfig().(*Config)
+	config.Topic = "projects/my-project/topics/my-topic"
+	assert.NoError(t, config.validate())
+	config.Compression = "xxx"
+	assert.Error(t, config.validate())
+	config.Compression = "gzip"
+	assert.NoError(t, config.validate())
+	config.Compression = "none"
+	assert.Error(t, config.validate())
+	config.Compression = ""
+	assert.NoError(t, config.validate())
+}
+
+func TestWatermarkBehaviourConfigValidation(t *testing.T) {
+	factory := NewFactory()
+	config := factory.CreateDefaultConfig().(*Config)
+	config.Topic = "projects/my-project/topics/my-topic"
+	assert.NoError(t, config.validate())
+	config.Watermark.Behaviour = "xxx"
+	assert.Error(t, config.validate())
+	config.Watermark.Behaviour = "earliest"
+	assert.NoError(t, config.validate())
+	config.Watermark.Behaviour = "none"
+	assert.Error(t, config.validate())
+	config.Watermark.Behaviour = "current"
 	assert.NoError(t, config.validate())
 }
