@@ -53,7 +53,25 @@ func Convert(obsLog *entry.Entry) pdata.Logs {
 		}
 	}
 
-	insertToAttributeVal(obsLog.Record, lr.Body())
+	insertToAttributeVal(obsLog.Body, lr.Body())
+
+	if obsLog.TraceId != nil {
+		var buffer [16]byte
+		copy(buffer[0:16], obsLog.TraceId)
+		lr.SetTraceID(pdata.NewTraceID(buffer))
+	}
+	if obsLog.SpanId != nil {
+		var buffer [8]byte
+		copy(buffer[0:8], obsLog.SpanId)
+		lr.SetSpanID(pdata.NewSpanID(buffer))
+	}
+	if obsLog.TraceFlags != nil {
+		flags := lr.Flags()
+		flags = flags & 0xFFFFFF00
+		flags = flags | uint32(obsLog.TraceFlags[0])
+
+		lr.SetFlags(flags)
+	}
 
 	ills.Logs().Append(lr)
 

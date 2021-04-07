@@ -45,7 +45,7 @@ func complexEntry() *entry.Entry {
 	e.AddResourceKey("type", "global")
 	e.AddAttribute("one", "two")
 	e.AddAttribute("two", "three")
-	e.Record = map[string]interface{}{
+	e.Body = map[string]interface{}{
 		"bool":   true,
 		"int":    123,
 		"double": 12.34,
@@ -78,7 +78,7 @@ func TestConvertMetadata(t *testing.T) {
 	e.Severity = entry.Error
 	e.AddResourceKey("type", "global")
 	e.AddAttribute("one", "two")
-	e.Record = true
+	e.Body = true
 
 	result := Convert(e)
 
@@ -110,26 +110,26 @@ func TestConvertMetadata(t *testing.T) {
 
 func TestConvertSimpleBody(t *testing.T) {
 
-	require.True(t, recordToBody(true).BoolVal())
-	require.False(t, recordToBody(false).BoolVal())
+	require.True(t, convertBody(true).BoolVal())
+	require.False(t, convertBody(false).BoolVal())
 
-	require.Equal(t, "string", recordToBody("string").StringVal())
-	require.Equal(t, "bytes", recordToBody([]byte("bytes")).StringVal())
+	require.Equal(t, "string", convertBody("string").StringVal())
+	require.Equal(t, "bytes", convertBody([]byte("bytes")).StringVal())
 
-	require.Equal(t, int64(1), recordToBody(1).IntVal())
-	require.Equal(t, int64(1), recordToBody(int8(1)).IntVal())
-	require.Equal(t, int64(1), recordToBody(int16(1)).IntVal())
-	require.Equal(t, int64(1), recordToBody(int32(1)).IntVal())
-	require.Equal(t, int64(1), recordToBody(int64(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(1).IntVal())
+	require.Equal(t, int64(1), convertBody(int8(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(int16(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(int32(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(int64(1)).IntVal())
 
-	require.Equal(t, int64(1), recordToBody(uint(1)).IntVal())
-	require.Equal(t, int64(1), recordToBody(uint8(1)).IntVal())
-	require.Equal(t, int64(1), recordToBody(uint16(1)).IntVal())
-	require.Equal(t, int64(1), recordToBody(uint32(1)).IntVal())
-	require.Equal(t, int64(1), recordToBody(uint64(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(uint(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(uint8(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(uint16(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(uint32(1)).IntVal())
+	require.Equal(t, int64(1), convertBody(uint64(1)).IntVal())
 
-	require.Equal(t, float64(1), recordToBody(float32(1)).DoubleVal())
-	require.Equal(t, float64(1), recordToBody(float64(1)).DoubleVal())
+	require.Equal(t, float64(1), convertBody(float32(1)).DoubleVal())
+	require.Equal(t, float64(1), convertBody(float64(1)).DoubleVal())
 }
 
 func TestConvertMapBody(t *testing.T) {
@@ -152,7 +152,7 @@ func TestConvertMapBody(t *testing.T) {
 		"float64": float64(1),
 	}
 
-	result := recordToBody(structuredRecord).MapVal()
+	result := convertBody(structuredRecord).MapVal()
 
 	v, _ := result.Get("true")
 	require.True(t, v.BoolVal())
@@ -195,7 +195,7 @@ func TestConvertArrayBody(t *testing.T) {
 		map[string]interface{}{"one": 1, "yes": true},
 	}
 
-	result := recordToBody(structuredRecord).ArrayVal()
+	result := convertBody(structuredRecord).ArrayVal()
 
 	require.True(t, result.At(0).BoolVal())
 	require.False(t, result.At(1).BoolVal())
@@ -229,7 +229,7 @@ func TestConvertArrayBody(t *testing.T) {
 
 func TestConvertUnknownBody(t *testing.T) {
 	unknownType := map[string]int{"0": 0, "1": 1}
-	require.Equal(t, fmt.Sprintf("%v", unknownType), recordToBody(unknownType).StringVal())
+	require.Equal(t, fmt.Sprintf("%v", unknownType), convertBody(unknownType).StringVal())
 }
 
 func TestConvertNestedMapBody(t *testing.T) {
@@ -242,7 +242,7 @@ func TestConvertNestedMapBody(t *testing.T) {
 		"unknown": unknownType,
 	}
 
-	result := recordToBody(structuredRecord).MapVal()
+	result := convertBody(structuredRecord).MapVal()
 
 	arrayAttVal, _ := result.Get("array")
 	a := arrayAttVal.ArrayVal()
@@ -260,9 +260,9 @@ func TestConvertNestedMapBody(t *testing.T) {
 	require.Equal(t, fmt.Sprintf("%v", unknownType), unknownAttVal.StringVal())
 }
 
-func recordToBody(record interface{}) pdata.AttributeValue {
+func convertBody(body interface{}) pdata.AttributeValue {
 	entry := entry.New()
-	entry.Record = record
+	entry.Body = body
 	return convertAndDrill(entry).Body()
 }
 
@@ -308,4 +308,27 @@ func TestConvertSeverity(t *testing.T) {
 			require.Equal(t, tc.expectedText, log.SeverityText())
 		})
 	}
+}
+
+func TestConvertTrace(t *testing.T) {
+	record := convertAndDrill(&entry.Entry{
+		TraceId: []byte{
+			0x48, 0x01, 0x40, 0xf3, 0xd7, 0x70, 0xa5, 0xae, 0x32, 0xf0, 0xa2, 0x2b, 0x6a, 0x81, 0x2c, 0xff,
+		},
+		SpanId: []byte{
+			0x32, 0xf0, 0xa2, 0x2b, 0x6a, 0x81, 0x2c, 0xff,
+		},
+		TraceFlags: []byte{
+			0x01,
+		}})
+
+	require.Equal(t, pdata.NewTraceID(
+		[16]byte{
+			0x48, 0x01, 0x40, 0xf3, 0xd7, 0x70, 0xa5, 0xae, 0x32, 0xf0, 0xa2, 0x2b, 0x6a, 0x81, 0x2c, 0xff,
+		}), record.TraceID())
+	require.Equal(t, pdata.NewSpanID(
+		[8]byte{
+			0x32, 0xf0, 0xa2, 0x2b, 0x6a, 0x81, 0x2c, 0xff,
+		}), record.SpanID())
+	require.Equal(t, uint32(0x01), record.Flags())
 }
