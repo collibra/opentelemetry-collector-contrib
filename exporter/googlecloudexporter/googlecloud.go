@@ -19,6 +19,7 @@ package googlecloudexporter
 import (
 	"context"
 	"fmt"
+	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudexporter/internal"
 	"strings"
 
 	"contrib.go.opencensus.io/exporter/stackdriver"
@@ -43,6 +44,11 @@ type traceExporter struct {
 // metricsExporter is a wrapper struct of OC stackdriver exporter
 type metricsExporter struct {
 	mexporter *stackdriver.Exporter
+}
+
+// logsExporter experiment
+type logsExporter struct {
+	lexporter* internal.GoogleLogging
 }
 
 func (te *traceExporter) Shutdown(ctx context.Context) error {
@@ -179,6 +185,68 @@ func newGoogleCloudMetricsExporter(cfg *Config, params component.ExporterCreateP
 		exporterhelper.WithRetry(cfg.RetrySettings))
 }
 
+func newGoogleCloudLogsExporter(cfg *Config, params component.ExporterCreateParams) (component.LogsExporter, error) {
+	setVersionInUserAgent(cfg, params.ApplicationStartInfo.Version)
+
+	// TODO:  For each ProjectID, create a different exporter
+	// or at least a unique Google Cloud client per ProjectID.
+	options := stackdriver.Options{
+		// If the project ID is an empty string, it will be set by default based on
+		// the project this is running on in GCP.
+		ProjectID: cfg.ProjectID,
+
+		MetricPrefix: cfg.MetricConfig.Prefix,
+
+		// Set DefaultMonitoringLabels to an empty map to avoid getting the "opencensus_task" label
+		DefaultMonitoringLabels: &stackdriver.Labels{},
+
+		Timeout: cfg.Timeout,
+	}
+
+	// note options.UserAgent overrides the option.WithUserAgent client option in the Metric exporter
+	if cfg.UserAgent != "" {
+		options.UserAgent = cfg.UserAgent
+	}
+
+	copts, err := generateClientOptions(cfg)
+	if err != nil {
+		return nil, err
+	}
+	options.TraceClientOptions = copts
+	options.MonitoringClientOptions = copts
+
+	if cfg.MetricConfig.SkipCreateMetricDescriptor {
+		options.SkipCMD = true
+	}
+	if len(cfg.ResourceMappings) > 0 {
+		rm := resourceMapper{
+			mappings: cfg.ResourceMappings,
+		}
+		options.MapResource = rm.mapResource
+	}
+
+	//sde, serr := stackdriver.NewExporter(options)
+	//if serr != nil {
+	//	return nil, fmt.Errorf("cannot configure Google Cloud metric exporter: %w", serr)
+	//}
+	mExp := &logsExporter{
+		lexporter: internal.NewGoogleLogging(context.Background(), cfg.ProjectID),
+	}
+	mExp.lexporter.LogName = cfg.LogsConfig.LogName
+
+	return exporterhelper.NewLogsExporter(
+		cfg,
+		params.Logger,
+		mExp.pushLogs,
+		//exporterhelper.WithShutdown(mExp.Shutdown),
+		// Disable exporterhelper Timeout, since we are using a custom mechanism
+		// within exporter itself
+		exporterhelper.WithTimeout(exporterhelper.TimeoutSettings{Timeout: 0}),
+		exporterhelper.WithQueue(cfg.QueueSettings),
+		exporterhelper.WithRetry(cfg.RetrySettings))
+}
+
+
 // pushMetrics calls StackdriverExporter.PushMetricsProto on each element of the given metrics
 func (me *metricsExporter) pushMetrics(ctx context.Context, m pdata.Metrics) error {
 	// PushMetricsProto doesn't bundle subsequent calls, so we need to
@@ -250,4 +318,14 @@ func numPoints(metrics []*metricspb.Metric) int {
 		}
 	}
 	return numPoints
+}
+func (te *logsExporter) pushLogs(ctx context.Context, td pdata.Logs) error {
+	batch := te.lexporter.NewBatch()
+	for i := 0; i < td.LogRecordCount(); i++ {
+		resourceLogs := td.ResourceLogs().At(i)
+		rl := te.lexporter.ToLogEntries(resourceLogs)
+		batch.Append(rl)
+	}
+	batch.WriteBatch()
+	return nil
 }

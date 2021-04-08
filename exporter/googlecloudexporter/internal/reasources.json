@@ -1,0 +1,3719 @@
+{
+  "resourceDescriptors": [
+    {
+      "type": "aiplatform.googleapis.com/Endpoint",
+      "displayName": "AI Platform Endpoint",
+      "description": "A Cloud AI Platform API Endpoint where Models are deployed into it.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP Project owning the Endpoint."
+        },
+        {
+          "key": "location",
+          "description": "The region in which the service is running."
+        },
+        {
+          "key": "endpoint_id",
+          "description": "The ID of the Endpoint."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aiplatform.googleapis.com/Endpoint",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "anthos_l4lb",
+      "displayName": "Anthos L4LB",
+      "description": "An Anthos L4 load balancer instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The GCP region where to store metrics."
+        },
+        {
+          "key": "kind",
+          "description": "The kind of the load balancer."
+        },
+        {
+          "key": "group_name",
+          "description": "The name of the load balancer group."
+        },
+        {
+          "key": "hostname",
+          "description": "The hostname of the instance running LB."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/anthos_l4lb",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "api",
+      "displayName": "Produced API",
+      "description": "An API provided by the producer.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "service",
+          "description": "The API service name, such as \"cloudsql.googleapis.com\"."
+        },
+        {
+          "key": "method",
+          "description": "The API method, such as \"disks.list\"."
+        },
+        {
+          "key": "version",
+          "description": "The API version, such as \"v1\"."
+        },
+        {
+          "key": "location",
+          "description": "The service specific notion of location. This can be the name of a zone, region, or \"global\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/api",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "apigateway.googleapis.com/Gateway",
+      "displayName": "API Gateway",
+      "description": "Fully managed API Gateway.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP Project owning the Gateway."
+        },
+        {
+          "key": "location",
+          "description": "The region in which the Gateway is running."
+        },
+        {
+          "key": "gateway_id",
+          "description": "The ID of the Gateway."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/apigateway.googleapis.com/Gateway",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "apigee.googleapis.com/Environment",
+      "displayName": "Apigee environment",
+      "description": "Monitored resource for Apigee environment.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The GCP project ID that writes to this monitored resource."
+        },
+        {
+          "key": "org",
+          "description": "An organization is a container for all the objects in an Apigee account."
+        },
+        {
+          "key": "env",
+          "description": "An environment is a runtime execution context for the proxies in an organization."
+        },
+        {
+          "key": "location",
+          "description": "Location where the Apigee infrastructure is provisioned."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/apigee.googleapis.com/Environment",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "apigee.googleapis.com/Proxy",
+      "displayName": "Apigee proxy",
+      "description": "Monitored resource for Apigee API proxy.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The GCP project ID that writes to this monitored resource."
+        },
+        {
+          "key": "org",
+          "description": "An organization is a container for all the objects in an Apigee account."
+        },
+        {
+          "key": "env",
+          "description": "An environment is a runtime execution context for the proxies in an organization."
+        },
+        {
+          "key": "location",
+          "description": "Location where the Apigee infrastructure is provisioned."
+        },
+        {
+          "key": "proxy_name",
+          "description": "A proxy is your interface to developers that want to use your backend services."
+        },
+        {
+          "key": "revision",
+          "description": "Revisions let you manage API proxy updates as you create and deploy them to an environment."
+        },
+        {
+          "key": "host",
+          "description": "Host is the runtime container/vm that the proxy is deployed on."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/apigee.googleapis.com/Proxy",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "apigee.googleapis.com/ProxyV2",
+      "displayName": "Apigee proxy (v2)",
+      "description": "Monitored resource for Apigee API proxy (v2).",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The GCP project ID that writes to this monitored resource."
+        },
+        {
+          "key": "org",
+          "description": "An organization is a container for all the objects in an Apigee account."
+        },
+        {
+          "key": "env",
+          "description": "An environment is a runtime execution context for the proxies in an organization."
+        },
+        {
+          "key": "location",
+          "description": "Location where the Apigee infrastructure is provisioned."
+        },
+        {
+          "key": "proxy_name",
+          "description": "A proxy is your interface to developers that want to use your backend services."
+        },
+        {
+          "key": "runtime_version",
+          "description": "Version of the Apigee Runtime for the proxy."
+        },
+        {
+          "key": "instance_id",
+          "description": "Instance ID of the Apigee application."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/apigee.googleapis.com/ProxyV2",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "app_script_function",
+      "displayName": "Apps Script Function",
+      "description": "An Apps Script function.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "invocation_type",
+          "description": "The invocation type."
+        },
+        {
+          "key": "function_name",
+          "description": "The function name."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/app_script_function",
+      "launchStage": "GA"
+    },
+    {
+      "type": "assistant_action",
+      "displayName": "Google Assistant Action",
+      "description": "An Action in a Google Assistant App.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "version_id",
+          "description": "Stringified version ID of the assistant agent."
+        },
+        {
+          "key": "action_id",
+          "description": "Action ID of the assistant agent."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/assistant_action",
+      "launchStage": "GA"
+    },
+    {
+      "type": "assistant_action_project",
+      "displayName": "Google Assistant Action Project",
+      "description": "A project in a Google Assistant Action.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/assistant_action_project",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "audited_resource",
+      "displayName": "Audited Resource",
+      "description": "A Google Cloud resource that produces an audit log.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "service",
+          "description": "The name of the API service generating the audit log."
+        },
+        {
+          "key": "method",
+          "description": "The name of the API method generating the audit log."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/audited_resource",
+      "launchStage": "GA"
+    },
+    {
+      "type": "autoscaler",
+      "displayName": "Autoscaler",
+      "description": "An autoscaler for a single managed instance group.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The zone or region for the autoscaler."
+        },
+        {
+          "key": "autoscaler_id",
+          "description": "The identifier for the autoscaler."
+        },
+        {
+          "key": "autoscaler_name",
+          "description": "The name of the autoscaler."
+        },
+        {
+          "key": "instance_group_manager_id",
+          "description": "The identifier for the managed instance group scaled by the given autoscaler."
+        },
+        {
+          "key": "instance_group_manager_name",
+          "description": "The name of the managed instance group scaled by the givenautoscaler."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/autoscaler",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "aws_alb_load_balancer",
+      "displayName": "Amazon ALB Load Balancer",
+      "description": "A load balancer in Amazon ALB.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "name",
+          "description": "The name of the load balancer."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the load balancer. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the load balancer."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_alb_load_balancer",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_cloudfront_distribution",
+      "displayName": "Amazon CloudFront CDN",
+      "description": "A CloudFront content distribution network.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "distribution_id",
+          "description": "The CloudFront distribution identifier assigned by AWS."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the CloudFront distribution. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the CDN."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_cloudfront_distribution",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_dynamodb_table",
+      "displayName": "Amazon DynamoDB Table",
+      "description": "A table in Amazon DynamoDB.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "table",
+          "description": "The table name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the table. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the table."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_dynamodb_table",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_ebs_volume",
+      "displayName": "Amazon EBS Volume",
+      "description": "An Amazon EC2 Elastic Block Storage volume.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "volume_id",
+          "description": "The EBS volume identifier assigned by AWS."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the volume. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the volume."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_ebs_volume",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_ec2_instance",
+      "displayName": "Amazon EC2 Instance",
+      "description": "A VM instance in Amazon EC2.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "instance_id",
+          "description": "The VM instance identifier assigned by AWS."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the VM. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the VM."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_ec2_instance",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_elasticache_cluster",
+      "displayName": "Amazon Elasticache Cluster",
+      "description": "A cache cluster in Amazon Elasticache.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "cluster_id",
+          "description": "The cluster identifier."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the cluster. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the cluster."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_elasticache_cluster",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_elb_load_balancer",
+      "displayName": "Amazon Elastic Load Balancer",
+      "description": "A load balancer in Amazon Elastic Load Balancer.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the load balancer. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "name",
+          "description": "The name of the load balancer."
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the load balancer."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_elb_load_balancer",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_emr_cluster",
+      "displayName": "Amazon EMR Cluster",
+      "description": "A cluster in Amazon Elastic MapReduce.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "cluster_id",
+          "description": "The cluster identifier."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the cluster. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the cluster."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_emr_cluster",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_kinesis_stream",
+      "displayName": "Amazon Kinesis Stream",
+      "description": "A stream in Amazon Kinesis.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "stream_name",
+          "description": "The stream name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the stream. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the stream."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_kinesis_stream",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_lambda_function",
+      "displayName": "Amazon Lambda Function",
+      "description": "A function in Amazon Lambda.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "function_name",
+          "description": "The function name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the function. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the function."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_lambda_function",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_rds_database",
+      "displayName": "Amazon RDS Database",
+      "description": "A database in Amazon Relational Database Service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "name",
+          "description": "The database name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the database. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the database."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_rds_database",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_redshift_cluster",
+      "displayName": "Amazon Redshift Cluster",
+      "description": "A cluster in Amazon Redshift.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "cluster_identifier",
+          "description": "The cluster name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the cluster. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the cluster."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_redshift_cluster",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_s3_bucket",
+      "displayName": "Amazon S3 Bucket",
+      "description": "A bucket in Amazon S3.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "bucket_name",
+          "description": "The bucket name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the bucket. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the bucket."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_s3_bucket",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_ses",
+      "displayName": "Amazon SES Region",
+      "description": "An Amazon region with Amazon Simple Email Service enabled.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the SES region."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_ses",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_sns_topic",
+      "displayName": "Amazon SNS Topic",
+      "description": "A topic in Amazon SNS.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "topic",
+          "description": "The topic name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the topic. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the topic."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_sns_topic",
+      "launchStage": "GA"
+    },
+    {
+      "type": "aws_sqs_queue",
+      "displayName": "Amazon SQS Queue",
+      "description": "A queue in Amazon Simple Queue Service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project under which data is stored for the AWS account specified in the aws_account label, such as \"my-project\"."
+        },
+        {
+          "key": "queue",
+          "description": "The queue name."
+        },
+        {
+          "key": "region",
+          "description": "The AWS region for the queue. The format of this field is \"aws:{region}\", where supported values for {region} are listed at http://docs.aws.amazon.com/general/latest/gr/rande.html. "
+        },
+        {
+          "key": "aws_account",
+          "description": "The AWS account number for the queue."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/aws_sqs_queue",
+      "launchStage": "GA"
+    },
+    {
+      "type": "bigquery_biengine_model",
+      "displayName": "BigQuery BI Engine Model",
+      "description": "BigQuery BI Engine Model.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Google Cloud location of the resource."
+        },
+        {
+          "key": "model_id",
+          "description": "The identifier of the BI model."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/bigquery_biengine_model",
+      "launchStage": "GA"
+    },
+    {
+      "type": "bigquery_dataset",
+      "displayName": "BigQuery Dataset",
+      "description": "A dataset in BigQuery.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "dataset_id",
+          "description": "The name of the BigQuery dataset."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/bigquery_dataset",
+      "launchStage": "GA"
+    },
+    {
+      "type": "bigquery_dts_config",
+      "displayName": "BigQuery DTS Config",
+      "description": "A BigQuery Data Transfer Service configuration.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Google Cloud location of the resource"
+        },
+        {
+          "key": "config_id",
+          "description": "The id of the DTS configuration."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/bigquery_dts_config",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "bigquery_project",
+      "displayName": "BigQuery Project",
+      "description": "BigQuery Project.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "Location of the resource."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/bigquery_project",
+      "launchStage": "GA"
+    },
+    {
+      "type": "bigtable_backup",
+      "displayName": "Cloud Bigtable Backup",
+      "description": "A backup in Google Cloud Bigtable.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "instance",
+          "description": "The identifier for the instance."
+        },
+        {
+          "key": "cluster",
+          "description": "The identifier for the cluster."
+        },
+        {
+          "key": "backup",
+          "description": "The identifier for the backup."
+        },
+        {
+          "key": "zone",
+          "description": "The zone of the backup."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/bigtable_backup",
+      "launchStage": "GA"
+    },
+    {
+      "type": "bigtable_cluster",
+      "displayName": "Cloud Bigtable Cluster",
+      "description": "A cluster in Google Cloud Bigtable.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "instance",
+          "description": "The identifier for the instance."
+        },
+        {
+          "key": "cluster",
+          "description": "The identifier for the cluster."
+        },
+        {
+          "key": "zone",
+          "description": "The zone of the cluster."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/bigtable_cluster",
+      "launchStage": "GA"
+    },
+    {
+      "type": "bigtable_table",
+      "displayName": "Cloud Bigtable Table",
+      "description": "A table in Google Cloud Bigtable.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "instance",
+          "description": "The identifier for the instance."
+        },
+        {
+          "key": "cluster",
+          "description": "The identifier for the cluster."
+        },
+        {
+          "key": "table",
+          "description": "The name of the table."
+        },
+        {
+          "key": "zone",
+          "description": "The zone of the table."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/bigtable_table",
+      "launchStage": "GA"
+    },
+    {
+      "type": "build",
+      "displayName": "Cloud Build",
+      "description": "A build in Cloud Build.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "build_id",
+          "description": "The unique id of the build."
+        },
+        {
+          "key": "build_trigger_id",
+          "description": "The unique id of the build trigger."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/build",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloud_composer_environment",
+      "displayName": "Cloud Composer Environment",
+      "description": "A Composer environment runs the managed Apache Airflow service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Cloud Composer location in which the environment is running."
+        },
+        {
+          "key": "environment_name",
+          "description": "The user-specified environment name."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_composer_environment",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloud_composer_workflow",
+      "displayName": "Cloud Composer Workflow",
+      "description": "A Composer workflow runs a managed Apache Airflow workflow.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Cloud Composer location in which the workflow is running."
+        },
+        {
+          "key": "workflow_name",
+          "description": "The user-specified workflow name."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_composer_workflow",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloud_dataproc_cluster",
+      "displayName": "Cloud Dataproc Cluster",
+      "description": "A Dataproc cluster with separate cluster name and id labels.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "cluster_name",
+          "description": "The user-specified cluster name."
+        },
+        {
+          "key": "cluster_uuid",
+          "description": "The generated cluster id."
+        },
+        {
+          "key": "region",
+          "description": "The Cloud Dataproc region in which the cluster is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_dataproc_cluster",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloud_dataproc_job",
+      "displayName": "Cloud Dataproc Job",
+      "description": "A Dataproc job execution.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The Cloud Dataproc region to which the job was submitted."
+        },
+        {
+          "key": "job_id",
+          "description": "The user-specified job id."
+        },
+        {
+          "key": "job_uuid",
+          "description": "The generated job uuid."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_dataproc_job",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloud_dlp_project",
+      "displayName": "Cloud Data Loss Prevention Project",
+      "description": "A Cloud Data Loss Prevention project.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Google Cloud location where the operation is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_dlp_project",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloud_function",
+      "displayName": "Cloud Function",
+      "description": "A function in Google Cloud Functions.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "function_name",
+          "description": "The short function name."
+        },
+        {
+          "key": "region",
+          "description": "The region in which the function is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_function",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloud_run_revision",
+      "displayName": "Cloud Run Revision",
+      "description": "A revision in Cloud Run.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "service_name",
+          "description": "Name of the service."
+        },
+        {
+          "key": "revision_name",
+          "description": "Name of the monitored revision."
+        },
+        {
+          "key": "location",
+          "description": "Region where the service is running."
+        },
+        {
+          "key": "configuration_name",
+          "description": "Name of the configuration which created the monitored revision."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_run_revision",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloud_scheduler_job",
+      "displayName": "Cloud Scheduler Job",
+      "description": "A Cloud Scheduler Job.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The region of the job."
+        },
+        {
+          "key": "job_id",
+          "description": "Identifier of the job."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_scheduler_job",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloud_tasks_queue",
+      "displayName": "Cloud Tasks Queue",
+      "description": "A queue in Cloud Tasks.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "queue_id",
+          "description": "The name of the queue."
+        },
+        {
+          "key": "target_type",
+          "description": "The target type the queue is dispatching to."
+        },
+        {
+          "key": "location",
+          "description": "The zone or region where the application is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloud_tasks_queue",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloudiot_device",
+      "displayName": "Cloud IoT Device",
+      "description": "A Device in Google Cloud IoT.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "device_num_id",
+          "valueType": "INT64",
+          "description": "The unique numeric identifier of the device."
+        },
+        {
+          "key": "device_registry_id",
+          "description": "The user-defined string identifier of the device registry."
+        },
+        {
+          "key": "location",
+          "description": "The cloud region of the device registry."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudiot_device",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloudiot_device_registry",
+      "displayName": "Cloud IoT Registry",
+      "description": "A Device Registry in Google Cloud IoT.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "device_registry_id",
+          "description": "The user-defined string identifier of the device registry."
+        },
+        {
+          "key": "location",
+          "description": "The cloud region of the device registry."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudiot_device_registry",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloudml_job",
+      "displayName": "Cloud ML Job",
+      "description": "A Google Cloud ML job.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "job_id",
+          "description": "An immutable identifier for a job."
+        },
+        {
+          "key": "region",
+          "description": "Cloud ML region."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudml_job",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloudml_model_version",
+      "displayName": "Cloud ML Model Version",
+      "description": "A Google Cloud ML model version.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "model_id",
+          "description": "An immutable identifier for a model."
+        },
+        {
+          "key": "version_id",
+          "description": "An immutable identifier for a version."
+        },
+        {
+          "key": "region",
+          "description": "Cloud ML region."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudml_model_version",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloudsql_database",
+      "displayName": "Cloud SQL Database",
+      "description": "A database hosted in Google Cloud SQL.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "database_id",
+          "description": "The ID of the database."
+        },
+        {
+          "key": "region",
+          "description": "The Google Cloud SQL region in which the database is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudsql_database",
+      "launchStage": "GA"
+    },
+    {
+      "type": "cloudsql_instance_database",
+      "displayName": "Cloud SQL Instance Database",
+      "description": "A database on a Cloud SQL instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "A GCP region or zone that this service agent is running in."
+        },
+        {
+          "key": "resource_id",
+          "description": "The instance ID of the database."
+        },
+        {
+          "key": "database",
+          "description": "The name of the database."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudsql_instance_database",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloudtrace.googleapis.com/CloudtraceProject",
+      "displayName": "Cloud Trace",
+      "description": "Cloud trace resource, e.g. project.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP container associated with the resource."
+        },
+        {
+          "key": "location",
+          "description": "The location that the Cloud Trace service recording the metrics is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudtrace.googleapis.com/CloudtraceProject",
+      "launchStage": "EARLY_ACCESS"
+    },
+    {
+      "type": "cloudvolumesgcp-api.netapp.com/CloudVolume",
+      "displayName": "Monitored Resource for NetApp CVS-Replication",
+      "description": "Monitored Resource for NetApp CVS-Replication.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "Project information."
+        },
+        {
+          "key": "location",
+          "description": "Region/Zone information for the volume."
+        },
+        {
+          "key": "volume_id",
+          "description": "ID of the volume."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudvolumesgcp-api.netapp.com/CloudVolume",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloudvolumesgcp-api.netapp.com/CloudVolumeSO",
+      "displayName": "Monitored Resource for NetApp CVS-SO",
+      "description": "Monitored Resource for NetApp CVS-SO.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "Project information."
+        },
+        {
+          "key": "location",
+          "description": "Region/Zone information for the volume."
+        },
+        {
+          "key": "volume_id",
+          "description": "ID of the volume."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudvolumesgcp-api.netapp.com/CloudVolumeSO",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "cloudvolumesgcp-api.netapp.com/NetAppCloudVolumeSO",
+      "displayName": "Monitored Resource for NetApp CVS-SO",
+      "description": "Monitored Resource for NetApp CVS-SO!",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "Project information!"
+        },
+        {
+          "key": "location",
+          "description": "Region/Zone information for the volume!"
+        },
+        {
+          "key": "volume_id",
+          "description": "ID of the volume!"
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/cloudvolumesgcp-api.netapp.com/NetAppCloudVolumeSO",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "compute.googleapis.com/VpcNetwork",
+      "displayName": "VPC Network",
+      "description": "VPC Network.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP container (i.e. project) associated with the VPC Network."
+        },
+        {
+          "key": "location",
+          "description": "Location of the VPC Network, global always."
+        },
+        {
+          "key": "network_id",
+          "description": "VPC Network resource ID."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/compute.googleapis.com/VpcNetwork",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "consumed_api",
+      "displayName": "Consumed API",
+      "description": "An API used by customers.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as 'my-project'."
+        },
+        {
+          "key": "service",
+          "description": "The API service name, such as 'cloudsql.googleapis.com'."
+        },
+        {
+          "key": "method",
+          "description": "The API method name, such as 'disks.list'."
+        },
+        {
+          "key": "version",
+          "description": "The API version, such as 'v1'."
+        },
+        {
+          "key": "location",
+          "description": "The service specific notion of location. This can be a name of a zone or region. If a service does not have any notion of zones then 'global' can be used."
+        },
+        {
+          "key": "credential_id",
+          "description": "The client credential ID, such as an API key ID or the OAuth client ID."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/consumed_api",
+      "launchStage": "GA"
+    },
+    {
+      "type": "consumer_quota",
+      "displayName": "Consumer Quota",
+      "description": "Quota used by consumers.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "service",
+          "description": "The name of the used service, such as \"cloudsql.googleapis.com\"."
+        },
+        {
+          "key": "location",
+          "description": "The location where the quota are consumed. It is a region for regional quota, or a zone for zonal quota, or \"global\" otherwise."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/consumer_quota",
+      "launchStage": "GA"
+    },
+    {
+      "type": "csr_repository",
+      "displayName": "Cloud Source Repository",
+      "description": "A repository in Google Cloud Source Repositories.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "name",
+          "description": "The name of the repository."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/csr_repository",
+      "launchStage": "GA"
+    },
+    {
+      "type": "dataflow_job",
+      "displayName": "Dataflow Job",
+      "description": "A Dataflow job.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "job_name",
+          "description": "The name of the job."
+        },
+        {
+          "key": "region",
+          "description": "The region for the job."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/dataflow_job",
+      "launchStage": "GA"
+    },
+    {
+      "type": "datastore_request",
+      "displayName": "Datastore Request",
+      "description": "A request to Datastore from your App Engine application.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "module_id",
+          "description": "The module of the App Engine application that made this request."
+        },
+        {
+          "key": "version_id",
+          "description": "The major version id of the App Engine application that made this request."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/datastore_request",
+      "launchStage": "GA"
+    },
+    {
+      "type": "deprecated_resource",
+      "displayName": "Reserved",
+      "description": "Reserved.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "param1",
+          "description": "Reserved."
+        },
+        {
+          "key": "param2",
+          "description": "Reserved."
+        },
+        {
+          "key": "param3",
+          "description": "Reserved."
+        },
+        {
+          "key": "param4",
+          "description": "Reserved."
+        },
+        {
+          "key": "location",
+          "description": "Reserved."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/deprecated_resource",
+      "launchStage": "DEPRECATED"
+    },
+    {
+      "type": "dns_managed_zone",
+      "displayName": "Managed DNS Zone",
+      "description": "A ManagedZone in the Google Cloud DNS service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "zone_name",
+          "description": "The name of the ManagedZone."
+        },
+        {
+          "key": "location",
+          "description": "The location field is provided for compatibility with other GCP services. Its value is always set to 'global'"
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/dns_managed_zone",
+      "launchStage": "GA"
+    },
+    {
+      "type": "dns_policy",
+      "displayName": "Cloud DNS Policy",
+      "description": "A Policy in the Google Cloud DNS service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "policy_name",
+          "description": "The name of the Policy."
+        },
+        {
+          "key": "location",
+          "description": "The location field is provided for compatibility with other GCP services. Its value is always set to 'global'"
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/dns_policy",
+      "launchStage": "GA"
+    },
+    {
+      "type": "dns_query",
+      "displayName": "Cloud DNS Query",
+      "description": "A DNS query to a private DNS handled by the Google Cloud DNS service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "target_name",
+          "description": "The DNS name managed by Cloud DNS to be resolved (e.g. the zone name, policy name, internal domain name). External names will have the value \"external\""
+        },
+        {
+          "key": "location",
+          "description": "The GCP zone where the DNS request was received (e.g. us-east1, us-west1)."
+        },
+        {
+          "key": "target_type",
+          "description": "The target of the resolution of the DNS query (e.g. public-zone, private-zone, external)."
+        },
+        {
+          "key": "source_type",
+          "description": "Source of the query (e.g. gce-vm, internet)."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/dns_query",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "filestore_instance",
+      "displayName": "Filestore Instance",
+      "description": "A Filestore instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The physical location of the instance."
+        },
+        {
+          "key": "instance_name",
+          "description": "The name for the Filestore instance."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/filestore_instance",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "firebase_auth",
+      "displayName": "Firebase Auth Project",
+      "description": "A Firebase Auth Project.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/firebase_auth",
+      "launchStage": "GA"
+    },
+    {
+      "type": "firebase_domain",
+      "displayName": "Firebase Hosting Site Domain",
+      "description": "A domain from which a Firebase Hosting site is serving traffic.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "site_name",
+          "description": "The name of a Firebase Hosting site, i.e. the subdomain in \u003csite_name\u003e.web.app."
+        },
+        {
+          "key": "domain_name",
+          "description": "The default subdomain (on web.app or firebaseapp.com) or custom domain from which content was served."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/firebase_domain",
+      "launchStage": "GA"
+    },
+    {
+      "type": "firebase_namespace",
+      "displayName": "Firebase Realtime Database",
+      "description": "A Firebase Realtime Database.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "table_name",
+          "description": "The name of the database."
+        },
+        {
+          "key": "location",
+          "description": "The location of the database."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/firebase_namespace",
+      "launchStage": "GA"
+    },
+    {
+      "type": "firestore_instance",
+      "displayName": "Firestore Instance",
+      "description": "An instance of the Cloud Firestore database.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/firestore_instance",
+      "launchStage": "GA"
+    },
+    {
+      "type": "fleetengine.googleapis.com/Fleet",
+      "displayName": "Fleet Engine",
+      "description": "A top-level resource for Fleet Engine metrics and logs.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP container associated with Fleet."
+        },
+        {
+          "key": "location",
+          "description": "The region in which the Fleet Engine instance is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/fleetengine.googleapis.com/Fleet",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "gae_app",
+      "displayName": "GAE Application",
+      "description": "An application running in Google App Engine (GAE).",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "module_id",
+          "description": "The service/module name."
+        },
+        {
+          "key": "version_id",
+          "description": "The version name."
+        },
+        {
+          "key": "zone",
+          "description": "The GAE zone where the application is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gae_app",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gae_instance",
+      "displayName": "GAE Instance",
+      "description": "A single instance of a Google App Engine (GAE) version.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "module_id",
+          "description": "The service/module name."
+        },
+        {
+          "key": "version_id",
+          "description": "The version name."
+        },
+        {
+          "key": "instance_id",
+          "description": "The instance id."
+        },
+        {
+          "key": "location",
+          "description": "App Engine's external notion of location."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gae_instance",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gce_disk",
+      "displayName": "Disk",
+      "description": "A disk belonging to a Compute Engine instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "disk_id",
+          "description": "Unique identifier of the disk."
+        },
+        {
+          "key": "zone",
+          "description": "The Compute Engine zone where the disk resides."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_disk",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gce_instance",
+      "displayName": "VM Instance",
+      "description": "A virtual machine instance hosted in Compute Engine.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "instance_id",
+          "description": "The numeric VM instance identifier assigned by Compute Engine."
+        },
+        {
+          "key": "zone",
+          "description": "The Compute Engine zone in which the VM is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_instance",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gce_network_endpoint_group",
+      "displayName": "Network Endpoint Group",
+      "description": "A Compute Engine network endpoint group resource.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "zone",
+          "description": "The name of the zone where the network endpoint group is located."
+        },
+        {
+          "key": "network_endpoint_group_id",
+          "description": "The ID of the network endpoint group."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_network_endpoint_group",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "gce_network_region",
+      "displayName": "Network Region",
+      "description": "A region of a Compute Engine network.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "network_id",
+          "description": "The ID of the Compute Engine network."
+        },
+        {
+          "key": "region",
+          "description": "The name of the network region."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_network_region",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "gce_node_group",
+      "displayName": "Node Group",
+      "description": "A Compute Engine node group.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "node_group_id",
+          "description": "Unique identifier of the node group."
+        },
+        {
+          "key": "zone",
+          "description": "Zone of the node group."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_node_group",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gce_node_template",
+      "displayName": "Node Template",
+      "description": "A Compute Engine node template.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "node_template_id",
+          "description": "Unique identifier of the node template."
+        },
+        {
+          "key": "region",
+          "description": "Region of the node template."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_node_template",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gce_resource_policy",
+      "displayName": "Resource Policy",
+      "description": "A Compute Engine resource policy.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "resource_policy_id",
+          "description": "Unique identifier of the resource policy."
+        },
+        {
+          "key": "region",
+          "description": "Region of the resource policy."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_resource_policy",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gce_router",
+      "displayName": "Cloud Router",
+      "description": "A Cloud Router instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "router_id",
+          "description": "The router identifier."
+        },
+        {
+          "key": "region",
+          "description": "The region where the router instance is located."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_router",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gce_subnetwork",
+      "displayName": "Subnetwork",
+      "description": "A Compute Engine subnetwork.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "subnetwork_id",
+          "description": "The unique numerical identifier of the subnetwork."
+        },
+        {
+          "key": "subnetwork_name",
+          "description": "The unique user provided name of the subnetwork."
+        },
+        {
+          "key": "location",
+          "description": "Location of the resource."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_subnetwork",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "gce_zone_network_health",
+      "displayName": "Zone Network Health",
+      "description": "Data concerning the networking related health of a Compute Engine zone",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "zone",
+          "description": "The Compute Engine zone being monitored."
+        },
+        {
+          "key": "region",
+          "description": "The Compute Engine region the zone belongs to."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gce_zone_network_health",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gcs_bucket",
+      "displayName": "GCS Bucket",
+      "description": "A Google Cloud Storage (GCS) bucket.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "bucket_name",
+          "description": "An immutable name of the bucket."
+        },
+        {
+          "key": "location",
+          "description": "Location of the bucket."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gcs_bucket",
+      "launchStage": "GA"
+    },
+    {
+      "type": "generic_node",
+      "displayName": "Generic Node",
+      "description": "A generic node identifies a machine or other computational resource for which no more specific resource type is applicable. The label values must uniquely identify the node.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The GCP or AWS region in which data about the resource is stored. For example, \"us-east1-a\" (GCP) or \"aws:us-east-1a\" (AWS)."
+        },
+        {
+          "key": "namespace",
+          "description": "A namespace identifier, such as a cluster name."
+        },
+        {
+          "key": "node_id",
+          "description": "A unique identifier for the node within the namespace, such as a hostname or IP address."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/generic_node",
+      "launchStage": "GA"
+    },
+    {
+      "type": "generic_task",
+      "displayName": "Generic Task",
+      "description": "A generic task identifies an application process for which no more specific resource is applicable, such as a process scheduled by a custom orchestration system. The label values must uniquely identify the task.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The GCP or AWS region in which data about the resource is stored. For example, \"us-east1-a\" (GCP) or \"aws:us-east-1a\" (AWS)."
+        },
+        {
+          "key": "namespace",
+          "description": "A namespace identifier, such as a cluster name."
+        },
+        {
+          "key": "job",
+          "description": "An identifier for a grouping of related tasks, such as the name of a microservice or distributed batch job."
+        },
+        {
+          "key": "task_id",
+          "description": "A unique identifier for the task within the namespace and job, such as a replica index identifying the task within the job."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/generic_task",
+      "launchStage": "GA"
+    },
+    {
+      "type": "gke_container",
+      "displayName": "GKE Container",
+      "description": "A Google Kubernetes Engine (GKE) container instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "cluster_name",
+          "description": "The name for the cluster the container is running in."
+        },
+        {
+          "key": "namespace_id",
+          "description": "The identifier for the cluster namespace the container is running in."
+        },
+        {
+          "key": "instance_id",
+          "description": "The identifier for the Compute Engine instance the container is running in."
+        },
+        {
+          "key": "pod_id",
+          "description": "The identifier for the pod the container is running in."
+        },
+        {
+          "key": "container_name",
+          "description": "The name of the container."
+        },
+        {
+          "key": "zone",
+          "description": "The zone for the instance."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/gke_container",
+      "launchStage": "GA"
+    },
+    {
+      "type": "global",
+      "displayName": "Global",
+      "description": "A resource type that is not associated with any specific resource.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/global",
+      "launchStage": "GA"
+    },
+    {
+      "type": "healthcare.googleapis.com/DataProtectionStore",
+      "displayName": "Data Protection Store",
+      "description": "A Data Protection Store inside a Dataset.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The project number (i.e. gaia ID) of the Cloud Healthcare project."
+        },
+        {
+          "key": "location",
+          "description": "Cloud region where the dataset is located."
+        },
+        {
+          "key": "dataset_id",
+          "description": "Dataset ID where store is located."
+        },
+        {
+          "key": "dataprotection_store_id",
+          "description": "Data Protection Store id."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/healthcare.googleapis.com/DataProtectionStore",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "http_load_balancer_backend",
+      "displayName": "Google Cloud HTTP Load Balancer Backend",
+      "description": "A specific backend group of the Load Balancer.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "backend_service_name",
+          "description": "The user-specified backend service name."
+        },
+        {
+          "key": "backend_group",
+          "description": "The user-specified backend group name."
+        },
+        {
+          "key": "backend_zone",
+          "description": "The zone where the backend group is running."
+        },
+        {
+          "key": "region",
+          "description": "The region where the service is. It will be \\\"global\\\" for global services."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/http_load_balancer_backend",
+      "launchStage": "EARLY_ACCESS"
+    },
+    {
+      "type": "https_lb_rule",
+      "displayName": "Google Cloud HTTP/S Load Balancing Rule",
+      "description": "A set of definitions for HTTP/S load balancing behavior.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The region on which HTTP/S Load Balancer is applied, such as 'global' or 'us-central1'. Various other objects are defined per that locality."
+        },
+        {
+          "key": "url_map_name",
+          "description": "The name of the urlmap."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "target_proxy_name",
+          "description": "The name of the target HTTP/S proxy."
+        },
+        {
+          "key": "matched_url_path_rule",
+          "description": "The prefix of URL defined in urlmap tree. 'UNMATCHED' for the sink default rule."
+        },
+        {
+          "key": "backend_target_name",
+          "description": "The name of the backend target - service or bucket."
+        },
+        {
+          "key": "backend_target_type",
+          "description": "The type of the backend target. Can be either 'BACKEND_SERVICE' or 'BACKEND_BUCKET'."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend group. Can be a special value if the backend wasn't assigned."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend group. Can be 'INSTANCE_GROUP', 'NETWORK_ENDPOINT_GROUP', or a special value if the backend wasn't assigned."
+        },
+        {
+          "key": "backend_scope",
+          "description": "The scope (zone-name or region-name) of the backend group. Can be a special value if the backend wasn't assigned. Can be empty if there is no response from the backend."
+        },
+        {
+          "key": "backend_scope_type",
+          "description": "The type of the scope of the backend group. Can be 'ZONE', 'REGION' or other special value in case the backend wasn't assigned."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/https_lb_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "iam_service_account",
+      "displayName": "IAM Service Account",
+      "description": "An IAM Service Account",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "unique_id",
+          "description": "The unique_id of the service account."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/iam_service_account",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "identitytoolkit_project",
+      "displayName": "Identity Toolkit Project",
+      "description": "An Identity Toolkit project.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/identitytoolkit_project",
+      "launchStage": "GA"
+    },
+    {
+      "type": "identitytoolkit_tenant",
+      "displayName": "Identity Toolkit Tenant",
+      "description": "An Identity Toolkit tenant.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "tenant_name",
+          "description": "The name of the tenant."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/identitytoolkit_tenant",
+      "launchStage": "GA"
+    },
+    {
+      "type": "instance_group",
+      "displayName": "Instance Group",
+      "description": "A group of VM instances.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The zone or region of the instance group."
+        },
+        {
+          "key": "instance_group_id",
+          "description": "The identifier of the instance group."
+        },
+        {
+          "key": "instance_group_name",
+          "description": "The name of the instance group."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/instance_group",
+      "launchStage": "GA"
+    },
+    {
+      "type": "interconnect",
+      "displayName": "Interconnect",
+      "description": "A physical connection to Google at a datacenter.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "interconnect",
+          "description": "The unique identifier of the interconnect."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/interconnect",
+      "launchStage": "GA"
+    },
+    {
+      "type": "interconnect_attachment",
+      "displayName": "Interconnect Attachment",
+      "description": "A VLAN attaching a cloud network to an Interconnect.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "attachment",
+          "description": "The unique identifier of the attachment."
+        },
+        {
+          "key": "interconnect",
+          "description": "The unique identifier of the interconnect that the attachment connects to."
+        },
+        {
+          "key": "region",
+          "description": "The cloud region that the attachment connects to."
+        },
+        {
+          "key": "interconnect_project",
+          "description": "The name of the project that owns interconnect that the attachment connects to."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/interconnect_attachment",
+      "launchStage": "GA"
+    },
+    {
+      "type": "internal_http_lb_rule",
+      "displayName": "Internal HTTP/S Load Balancing Rule",
+      "description": "A resource descriptor for Internal HTTP/S load balancing behavior.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "network_name",
+          "description": "The name of the customer network in which the Load Balancer resides."
+        },
+        {
+          "key": "region",
+          "description": "The region under which the Load Balancer is defined."
+        },
+        {
+          "key": "url_map_name",
+          "description": "The name of the urlmap."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "target_proxy_name",
+          "description": "The name of the target HTTP/S proxy."
+        },
+        {
+          "key": "matched_url_path_rule",
+          "description": "The prefix of URL defined in urlmap tree. 'UNMATCHED' for the sink default rule."
+        },
+        {
+          "key": "backend_target_name",
+          "description": "The name of the backend target or service."
+        },
+        {
+          "key": "backend_target_type",
+          "description": "The type of the backend target. Can be 'BACKEND_SERVICE', or 'UNKNOWN' if the backend wasn't assigned."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend group. Can be '' if the backend wasn't assigned."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend group. Can be 'INSTANCE_GROUP', 'NETWORK_ENDPOINT_GROUP', or 'UNKNOWN' if the backend wasn't assigned."
+        },
+        {
+          "key": "backend_scope",
+          "description": "The scope (\u003czone-name\u003e or \u003cregion-name\u003e) of the backend group. Can be 'UNKNOWN' if the backend wasn't assigned."
+        },
+        {
+          "key": "backend_scope_type",
+          "description": "The type of the scope of the backend group. Can be 'ZONE', 'REGION', or 'UNKNOWN' in case the backend wasn't assigned."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/internal_http_lb_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "internal_tcp_lb_rule",
+      "displayName": "Google Cloud TCP Load Balancer (Internal) Rule",
+      "description": "A set of definitions for internal TCP load balancing behavior.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The region of the backend target."
+        },
+        {
+          "key": "network_name",
+          "description": "The name of the virtual network."
+        },
+        {
+          "key": "backend_target_type",
+          "description": "The type of the backend target that handled the connection. Currently it's 'BACKEND_SERVICE'."
+        },
+        {
+          "key": "backend_target_name",
+          "description": "The name of the backend target that handled the connection (equivalent to 'load_balancer_name')."
+        },
+        {
+          "key": "load_balancer_name",
+          "description": "The name of the load balancer."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend group that handled the connection."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend group that handled the connection. Currently it's 'INSTANCE_GROUP'."
+        },
+        {
+          "key": "backend_scope",
+          "description": "The scope (zone or region) of the backend group that handled the connection."
+        },
+        {
+          "key": "backend_scope_type",
+          "description": "The type of the scope of the backend group that handled the connection. Can be either 'ZONE' or 'REGION'."
+        },
+        {
+          "key": "backend_subnetwork_name",
+          "description": "The name of the subnetwork of the backend."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/internal_tcp_lb_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "internal_udp_lb_rule",
+      "displayName": "Google Cloud UDP Load Balancer (Internal) Rule",
+      "description": "A set of definitions for internal UDP load balancing behavior.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The region of the backend target."
+        },
+        {
+          "key": "network_name",
+          "description": "The name of the virtual network."
+        },
+        {
+          "key": "backend_target_type",
+          "description": "The type of the backend target that handled the connection. Currently it's 'BACKEND_SERVICE'."
+        },
+        {
+          "key": "backend_target_name",
+          "description": "The name of the backend target that handled the connection (equivalent to 'load_balancer_name')."
+        },
+        {
+          "key": "load_balancer_name",
+          "description": "The name of the load balancer."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend group that handled the connection."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend group that handled the connection. Currently it's 'INSTANCE_GROUP'."
+        },
+        {
+          "key": "backend_scope",
+          "description": "The scope (zone or region) of the backend group that handled the connection."
+        },
+        {
+          "key": "backend_scope_type",
+          "description": "The type of the scope of the backend group that handled the connection. Can be either 'ZONE' or 'REGION'."
+        },
+        {
+          "key": "backend_subnetwork_name",
+          "description": "The name of the subnetwork of the backend."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/internal_udp_lb_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "istio_canonical_service",
+      "displayName": "Istio Canonical Service",
+      "description": "An Istio Canonical Service represents a group of related workloads (example: Kubernetes Deployment) that communicate with other workload groups in an Istio service mesh.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "mesh_uid",
+          "description": "Unique identifier for an Istio service mesh."
+        },
+        {
+          "key": "namespace_name",
+          "description": "The name of the namespace that the service is running in."
+        },
+        {
+          "key": "canonical_service_name",
+          "description": "The name of the canonical service."
+        },
+        {
+          "key": "location",
+          "description": "The physical location of the workload instance that is running the service."
+        },
+        {
+          "key": "revision",
+          "description": "Immutable version of the service. This may be a semantic versioning level version or git SHA or similar."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/istio_canonical_service",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "istio_control_plane",
+      "displayName": "Istio Control Plane",
+      "description": "An Istio Control Plane is an instance of a service that provides xDS and related functionality to a set of managed Istio proxies.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "mesh_uid",
+          "description": "Unique identifier for an Istio service mesh."
+        },
+        {
+          "key": "location",
+          "description": "The physical location in which the workload for the Control Plane is located."
+        },
+        {
+          "key": "revision",
+          "description": "Immutable revision of Istio managed by the Control Plane."
+        },
+        {
+          "key": "build_id",
+          "description": "Immutable build tag for the instance of the Control Plane."
+        },
+        {
+          "key": "owner",
+          "description": "Immutable name of the owner of the Control Plane."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/istio_control_plane",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "k8s_cluster",
+      "displayName": "Kubernetes Cluster",
+      "description": "A Kubernetes cluster. It contains Kubernetes audit logs from the cluster.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The physical location of the cluster."
+        },
+        {
+          "key": "cluster_name",
+          "description": "The name of the cluster."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/k8s_cluster",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "k8s_container",
+      "displayName": "Kubernetes Container",
+      "description": "A Kubernetes container instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The physical location of the cluster that contains the container."
+        },
+        {
+          "key": "cluster_name",
+          "description": "The name of the cluster that the container is running in."
+        },
+        {
+          "key": "namespace_name",
+          "description": "The name of the namespace that the container is running in."
+        },
+        {
+          "key": "pod_name",
+          "description": "The name of the pod that the container is running in."
+        },
+        {
+          "key": "container_name",
+          "description": "The name of the container."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/k8s_container",
+      "launchStage": "GA"
+    },
+    {
+      "type": "k8s_control_plane_component",
+      "displayName": "Kubernetes Control Plane Component",
+      "description": "A Kubernetes Control Plane component.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The physical location of the cluster that contains the control plane component."
+        },
+        {
+          "key": "cluster_name",
+          "description": "The name of the cluster that the control plane component is running in."
+        },
+        {
+          "key": "component_name",
+          "description": "The name of the control plane component."
+        },
+        {
+          "key": "component_location",
+          "description": "The physical location where the control plane component is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/k8s_control_plane_component",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "k8s_node",
+      "displayName": "Kubernetes Node",
+      "description": "A Kubernetes node instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The physical location of the cluster that contains the node."
+        },
+        {
+          "key": "cluster_name",
+          "description": "The name of the cluster that the node is a part of."
+        },
+        {
+          "key": "node_name",
+          "description": "The name of the node."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/k8s_node",
+      "launchStage": "GA"
+    },
+    {
+      "type": "k8s_pod",
+      "displayName": "Kubernetes Pod",
+      "description": "A Kubernetes pod instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The physical location of the cluster that contains the pod."
+        },
+        {
+          "key": "cluster_name",
+          "description": "The name of the cluster that the pod is running in."
+        },
+        {
+          "key": "namespace_name",
+          "description": "The name of the namespace that the pod is running in."
+        },
+        {
+          "key": "pod_name",
+          "description": "The name of the pod."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/k8s_pod",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "knative_broker",
+      "displayName": "Cloud Run for Anthos Broker",
+      "description": "A Knative broker in Cloud Run for Anthos.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "Location where the broker is running."
+        },
+        {
+          "key": "cluster_name",
+          "description": "Name of the GKE cluster."
+        },
+        {
+          "key": "namespace_name",
+          "description": "Name of the namespace."
+        },
+        {
+          "key": "broker_name",
+          "description": "Name of the broker."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/knative_broker",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "knative_revision",
+      "displayName": "Cloud Run for Anthos Revision",
+      "description": "A Knative revision in Cloud Run for Anthos.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "service_name",
+          "description": "Name of the service."
+        },
+        {
+          "key": "revision_name",
+          "description": "Name of the monitored revision."
+        },
+        {
+          "key": "location",
+          "description": "Location where the service is running."
+        },
+        {
+          "key": "configuration_name",
+          "description": "Name of the configuration which created the monitored revision."
+        },
+        {
+          "key": "cluster_name",
+          "description": "Name of the GKE cluster."
+        },
+        {
+          "key": "namespace_name",
+          "description": "Name of the namespace."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/knative_revision",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "knative_trigger",
+      "displayName": "Cloud Run for Anthos Trigger",
+      "description": "A Knative trigger in Cloud Run for Anthos.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "Location where the broker is running."
+        },
+        {
+          "key": "cluster_name",
+          "description": "Name of the GKE cluster."
+        },
+        {
+          "key": "namespace_name",
+          "description": "Name of the namespace."
+        },
+        {
+          "key": "broker_name",
+          "description": "Name of the broker the trigger is associated with."
+        },
+        {
+          "key": "trigger_name",
+          "description": "Name of the trigger."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/knative_trigger",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "l7_lb_rule",
+      "displayName": "Google Cloud HTTP Load Balancing Rule (Logs-based Metrics)",
+      "description": "A set of definitions for HTTP load balancing behavior used for logs-based metrics.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "target_proxy_name",
+          "description": "The name of the target proxy."
+        },
+        {
+          "key": "target_proxy_type",
+          "description": "The type of the target proxy."
+        },
+        {
+          "key": "url_map_name",
+          "description": "The name of the urlmap."
+        },
+        {
+          "key": "matched_url_path_rule",
+          "description": "The prefix of URL defined in urlmap tree."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend."
+        },
+        {
+          "key": "instance_group_name",
+          "description": "The name of the instance group."
+        },
+        {
+          "key": "backend_zone",
+          "description": "The zone of the instance group."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/l7_lb_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "logging_exclusion",
+      "displayName": "Log Exclusion",
+      "description": "An exclusion in Stackdriver Logging.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "name",
+          "description": "The unique name of the exclusion."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/logging_exclusion",
+      "launchStage": "GA"
+    },
+    {
+      "type": "logging_sink",
+      "displayName": "Logging export sink",
+      "description": "An export sink in Stackdriver Logging.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "name",
+          "description": "The unique name of the sink."
+        },
+        {
+          "key": "destination",
+          "description": "The destination of the sink."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/logging_sink",
+      "launchStage": "GA"
+    },
+    {
+      "type": "memcache_node",
+      "displayName": "Memorystore Memcached Node",
+      "description": "A node of a Memorystore Memcached instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "Google Cloud zone where the Memcached node is located"
+        },
+        {
+          "key": "instance_id",
+          "description": "Customer given identifier unique among Memcached instances in the region that this node belongs to."
+        },
+        {
+          "key": "node_id",
+          "description": "Name of this Memcached node which is unique within a single Memcached instance."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/memcache_node",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "metastore.googleapis.com/Service",
+      "displayName": "Dataproc Metastore Service",
+      "description": "A Dataproc Metastore Service.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The ID of the customer project."
+        },
+        {
+          "key": "location",
+          "description": "The region that the service is hosted in."
+        },
+        {
+          "key": "service_id",
+          "description": "The service ID."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/metastore.googleapis.com/Service",
+      "launchStage": "GA"
+    },
+    {
+      "type": "metric",
+      "displayName": "Metric Type",
+      "description": "A Stackdriver Monitoring metric type.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "name",
+          "description": "The name of the metric type, such as \"logging.googleapis.com/my-metric-name\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/metric",
+      "launchStage": "GA"
+    },
+    {
+      "type": "microsoft_ad_domain",
+      "displayName": "Microsoft Active Directory Domain",
+      "description": "A Microsoft Active Directory Domain hosted and managed by Google Cloud Platform",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "fqdn",
+          "description": "The fully qualified domain name of the Active Directory Domain"
+        },
+        {
+          "key": "location",
+          "description": "The location where Active Directory Domain resources (like VMs, etc.) are present."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/microsoft_ad_domain",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "nat_gateway",
+      "displayName": "Cloud NAT Gateway",
+      "description": "A Cloud NAT Gateway.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The region where the NAT gateway is located."
+        },
+        {
+          "key": "router_id",
+          "description": "Identifier of the router under which the NAT gateway is defined."
+        },
+        {
+          "key": "gateway_name",
+          "description": "The name of the NAT gateway."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/nat_gateway",
+      "launchStage": "GA"
+    },
+    {
+      "type": "netapp_cloud_volume",
+      "displayName": "NetApp Cloud Volume",
+      "description": "A specific volume in the NetApp Cloud Volumes service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Google Cloud location in which the NetApp Cloud Volume instance is running."
+        },
+        {
+          "key": "volume_id",
+          "description": "The ID of a NetApp Volume."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/netapp_cloud_volume",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "network_security_policy",
+      "displayName": "Network Security Policy",
+      "description": "A network security policy.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "policy_name",
+          "description": "The unique user provided name of the security policy."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/network_security_policy",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "privateca.googleapis.com/CertificateAuthority",
+      "displayName": "Certificate Authority",
+      "description": "A managed Certificate Authority.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Cloud region where the Certificate Authority is located."
+        },
+        {
+          "key": "certificate_authority_id",
+          "description": "The Certificate Authority ID."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/privateca.googleapis.com/CertificateAuthority",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "produced_api",
+      "displayName": "Produced API with consumer dimension",
+      "description": "An API provided by the producer with consumer dimension.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as 'my-project'."
+        },
+        {
+          "key": "service",
+          "description": "The API service name, such as 'cloudsql.googleapis.com'."
+        },
+        {
+          "key": "method",
+          "description": "The API method name, such as 'disks.list'."
+        },
+        {
+          "key": "version",
+          "description": "The API version, such as 'v1'."
+        },
+        {
+          "key": "location",
+          "description": "The service specific notion of location. This can be a name of a zone or region. If a service does not have any notion of zones then 'global' can be used."
+        },
+        {
+          "key": "consumer_id",
+          "description": "This is the ID of a consumer project that's made a request to the API, such as project number '412016889367'."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/produced_api",
+      "launchStage": "GA"
+    },
+    {
+      "type": "producer_quota",
+      "displayName": "Producer Quota",
+      "description": "Quota provided by the service producer.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "service",
+          "description": "The name of the service, such as \"cloudsql.googleapis.com\"."
+        },
+        {
+          "key": "location",
+          "description": "The location where the quota are consumed. It is a region for regional quota, or a zone for zonal quota, or \"global\" otherwise."
+        },
+        {
+          "key": "consumer_resource_node",
+          "description": "The resource node consuming quota. For projects, it is the project number. For other resource nodes like folders and organzations, it must have type prefix, such as \"organizations/12345\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/producer_quota",
+      "launchStage": "GA"
+    },
+    {
+      "type": "pubsub_snapshot",
+      "displayName": "Cloud Pub/Sub Snapshot",
+      "description": "A snapshot in Google Cloud Pub/Sub.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "snapshot_id",
+          "description": "The identifier of the snapshot, such as \"my-snapshot\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/pubsub_snapshot",
+      "launchStage": "GA"
+    },
+    {
+      "type": "pubsub_subscription",
+      "displayName": "Cloud Pub/Sub Subscription",
+      "description": "A subscription in Google Cloud Pub/Sub.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "subscription_id",
+          "description": "The identifier of the subscription, such as \"my-subscription\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/pubsub_subscription",
+      "launchStage": "GA"
+    },
+    {
+      "type": "pubsub_topic",
+      "displayName": "Cloud Pub/Sub Topic",
+      "description": "A topic in Google Cloud Pub/Sub.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "topic_id",
+          "description": "The identifier of the topic, such as \"my-topic\"."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/pubsub_topic",
+      "launchStage": "GA"
+    },
+    {
+      "type": "pubsublite_subscription_partition",
+      "displayName": "Pub/Sub Lite Subscription Partition",
+      "description": "A subscription partition in Google Pub/Sub Lite.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "subscription_id",
+          "description": "The identifier of the subscription, such as \"my-subscription\"."
+        },
+        {
+          "key": "partition",
+          "valueType": "INT64",
+          "description": "The partition within the subscription's topic."
+        },
+        {
+          "key": "location",
+          "description": "The GCP zone where the subscription's topic resides (e.g. us-east1-a, us-west1-a)."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/pubsublite_subscription_partition",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "pubsublite_topic_partition",
+      "displayName": "Pub/Sub Lite Topic Partition",
+      "description": "A topic partition in Google Pub/Sub Lite.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "topic_id",
+          "description": "The identifier of the topic, such as \"my-topic\"."
+        },
+        {
+          "key": "partition",
+          "valueType": "INT64",
+          "description": "The partition within the topic."
+        },
+        {
+          "key": "location",
+          "description": "The GCP zone where the topic resides (e.g. us-east1-a, us-west1-a)."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/pubsublite_topic_partition",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "recaptchaenterprise.googleapis.com/Key",
+      "displayName": "reCAPTCHA Key",
+      "description": "Monitoring resource for reCAPTCHA Key.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The ID of the GCP project associated with this reCAPTCHA Key."
+        },
+        {
+          "key": "location",
+          "description": "Location where the reCAPTCHA Key is provisioned."
+        },
+        {
+          "key": "key_id",
+          "description": "The ID for this Key."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/recaptchaenterprise.googleapis.com/Key",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "recommendationengine.googleapis.com/EventStore",
+      "displayName": "Recommendation Event Store",
+      "description": "Recommendation event store resource.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP container associated with the resource."
+        },
+        {
+          "key": "location",
+          "description": "Location of the event store."
+        },
+        {
+          "key": "catalog_id",
+          "description": "The id of catalog associated with the event store."
+        },
+        {
+          "key": "event_store_id",
+          "description": "The id of event store."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/recommendationengine.googleapis.com/EventStore",
+      "launchStage": "EARLY_ACCESS"
+    },
+    {
+      "type": "recommender",
+      "displayName": "Recommender",
+      "description": "A Recommender represents a grouping of similar recommendations.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "recommender_id",
+          "description": "The name of the recommender."
+        },
+        {
+          "key": "location",
+          "description": "The location of the recommendation."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/recommender",
+      "launchStage": "GA"
+    },
+    {
+      "type": "recommender_insight_type",
+      "displayName": "InsightType",
+      "description": "An InsightType represents a grouping of similar insights.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "insight_type_id",
+          "description": "The resource ID of the insight type."
+        },
+        {
+          "key": "location",
+          "description": "The location of the insight."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/recommender_insight_type",
+      "launchStage": "GA"
+    },
+    {
+      "type": "redis_instance",
+      "displayName": "Cloud Memorystore Redis Instance",
+      "description": "A Redis instance hosted on Google Cloud Memorystore.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The Google Cloud region in which the managed instance is running."
+        },
+        {
+          "key": "instance_id",
+          "description": "The ID of the managed instance."
+        },
+        {
+          "key": "node_id",
+          "description": "The ID of a Redis node within the managed instance."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/redis_instance",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "remotebuild_instance",
+      "displayName": "Remote Build Execution Instance",
+      "description": "A specific instance for the Remote Build Execution service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The Cloud zone of the instance."
+        },
+        {
+          "key": "instance_id",
+          "description": "The specific instance within the Remote Build Execution consumer project."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/remotebuild_instance",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "secretmanager.googleapis.com/Secret",
+      "displayName": "Secret Manager Secret",
+      "description": "A logical secret whose value and versions can be accessed.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP project associated with this resource."
+        },
+        {
+          "key": "location",
+          "description": "Location of secret metadata. Always global."
+        },
+        {
+          "key": "secret_id",
+          "description": "The name given to this secret."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/secretmanager.googleapis.com/Secret",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "servicedirectory_namespace",
+      "displayName": "Service Directory Namespace",
+      "description": "A namespace in the Service Directory service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The cloud region of the Service Directory namespace."
+        },
+        {
+          "key": "namespace_name",
+          "description": "The name of the Service Directory namespace."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/servicedirectory_namespace",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "spanner_instance",
+      "displayName": "Cloud Spanner Instance",
+      "description": "A Cloud Spanner instance.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "instance_id",
+          "description": "An immutable identifier for an instance."
+        },
+        {
+          "key": "location",
+          "description": "Cloud Spanner region."
+        },
+        {
+          "key": "instance_config",
+          "description": "Instance config for the instance."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/spanner_instance",
+      "launchStage": "GA"
+    },
+    {
+      "type": "tcp_lb_rule",
+      "displayName": "Google Cloud Network TCP Load Balancer Rule",
+      "description": "A set of definitions for network TCP load balancing behavior.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "load_balancer_name",
+          "description": "The name of the load balancer."
+        },
+        {
+          "key": "region",
+          "description": "The Google Cloud Platform region of the backends instance that connected to network load balancing forwarding rule."
+        },
+        {
+          "key": "network_name",
+          "description": "The network from which the instance that connected to network load balancing sends traffic."
+        },
+        {
+          "key": "backend_target_type",
+          "description": "The type of the backend target that handled the connection."
+        },
+        {
+          "key": "backend_target_name",
+          "description": "The name of the backend target that handled the connection."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "forwarding_rule_network_tier",
+          "description": "The network tier of the forwarding rule."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend that handled the connection."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend that handled the connection."
+        },
+        {
+          "key": "backend_scope",
+          "description": "The scope (zone or region) of the backend group that handled the connection."
+        },
+        {
+          "key": "backend_scope_type",
+          "description": "The type of the scope of the backend group that handled the connection. Can be either 'ZONE' or 'REGION'."
+        },
+        {
+          "key": "backend_failover_configuration",
+          "description": "The configured state of the backend group or the target pool that handled the connection."
+        },
+        {
+          "key": "backend_subnetwork_name",
+          "description": "The name of the subnetwork of the instance that handled the connection."
+        },
+        {
+          "key": "endpoint_zone",
+          "description": "The zone of the endpoint (VM instance) that handled the connection."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/tcp_lb_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "tcp_ssl_proxy_rule",
+      "displayName": "Google Cloud TCP/SSL Proxy Rule",
+      "description": "A set of definitions for TCP/SSL proxy behavior.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The region on which TCP/SSL proxy is applied, such as 'global' or 'us-central1'. Various other objects are defined per that locality."
+        },
+        {
+          "key": "backend_target_name",
+          "description": "The name of the backend target ('backend service', equivalent to 'proxy name')."
+        },
+        {
+          "key": "backend_target_type",
+          "description": "The type of the backend target. Can only be 'BACKEND_SERVICE' currently."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "target_proxy_name",
+          "description": "The name of the target TCP/SSL proxy."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend group."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend group. Can be 'INSTANCE_GROUP' or 'NETWORK_ENDPOINT_GROUP'."
+        },
+        {
+          "key": "backend_scope",
+          "description": "The scope (zone or region) of the backend group."
+        },
+        {
+          "key": "backend_scope_type",
+          "description": "The type of the scope of the backend group. Can be either 'ZONE' or 'REGION'."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/tcp_ssl_proxy_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "threat_detector",
+      "displayName": "Threat Detector",
+      "description": "A detector in the Threat Detection service.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "detector_name",
+          "description": "The specific detector that triggered the alert."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/threat_detector",
+      "launchStage": "GA"
+    },
+    {
+      "type": "tpu_worker",
+      "displayName": "TPU Worker",
+      "description": "A TPU Worker executing Tensorflow work for a TPU Node.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "zone",
+          "description": "The Google Cloud zone in which the TPU Worker is running."
+        },
+        {
+          "key": "node_id",
+          "description": "The ID of the TPU Node."
+        },
+        {
+          "key": "worker_id",
+          "description": "The ID of a TPU Worker within the TPU Node."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/tpu_worker",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "transfer_service_agent",
+      "displayName": "Transfer Service Agent",
+      "description": "An instance of the agent application that Transfer Service uses to transfer data into Google Cloud.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "agent_id",
+          "description": "The unique identifier of the agent within the GCP project."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/transfer_service_agent",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "udp_lb_rule",
+      "displayName": "Google Cloud Network UDP Load Balancer Rule",
+      "description": "A set of definitions for network UDP load balancing behavior.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "load_balancer_name",
+          "description": "The name of the load balancer."
+        },
+        {
+          "key": "region",
+          "description": "The Google Cloud Platform region of the backends instance that connected to network load balancing forwarding rule."
+        },
+        {
+          "key": "network_name",
+          "description": "The network from which the instance that connected to network load balancing sends traffic."
+        },
+        {
+          "key": "backend_target_type",
+          "description": "The type of the backend target that handled the connection."
+        },
+        {
+          "key": "backend_target_name",
+          "description": "The name of the backend target that handled the connection."
+        },
+        {
+          "key": "forwarding_rule_name",
+          "description": "The name of the forwarding rule."
+        },
+        {
+          "key": "forwarding_rule_network_tier",
+          "description": "The network tier of the forwarding rule."
+        },
+        {
+          "key": "backend_name",
+          "description": "The name of the backend that handled the connection."
+        },
+        {
+          "key": "backend_type",
+          "description": "The type of the backend that handled the connection."
+        },
+        {
+          "key": "backend_scope",
+          "description": "The scope (zone or region) of the backend group that handled the connection."
+        },
+        {
+          "key": "backend_scope_type",
+          "description": "The type of the scope of the backend group that handled the connection. Can be either 'ZONE' or 'REGION'."
+        },
+        {
+          "key": "backend_failover_configuration",
+          "description": "The configured state of the backend group or the target pool that handled the connection."
+        },
+        {
+          "key": "backend_subnetwork_name",
+          "description": "The name of the subnetwork of the instance that handled the connection."
+        },
+        {
+          "key": "endpoint_zone",
+          "description": "The zone of the endpoint (VM instance) that handled the connection."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/udp_lb_rule",
+      "launchStage": "GA"
+    },
+    {
+      "type": "uptime_url",
+      "displayName": "Uptime Check URL",
+      "description": "An Uptime Monitoring check against a custom URL.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "host",
+          "description": "The hostname or IP address of the check."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/uptime_url",
+      "launchStage": "GA"
+    },
+    {
+      "type": "vpc_access_connector",
+      "displayName": "VPC Access Connector",
+      "description": "A connector that can communicate with devices within a VPC.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "location",
+          "description": "The region the connector is located in."
+        },
+        {
+          "key": "connector_name",
+          "description": "The name of the connector."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/vpc_access_connector",
+      "launchStage": "BETA"
+    },
+    {
+      "type": "vpn_gateway",
+      "displayName": "Cloud VPN Gateway",
+      "description": "A Cloud VPN gateway.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "gateway_id",
+          "description": "The VPN Gateway ID."
+        },
+        {
+          "key": "region",
+          "description": "The region in which the VPN Gateway is running."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/vpn_gateway",
+      "launchStage": "GA"
+    },
+    {
+      "type": "vpn_tunnel",
+      "displayName": "Cloud VPN Tunnel",
+      "description": "A Cloud VPN Tunnel.",
+      "labels": [
+        {
+          "key": "project_id",
+          "description": "The identifier of the GCP project associated with this resource, such as \"my-project\"."
+        },
+        {
+          "key": "region",
+          "description": "The region in which the VPN Tunnel is activly running."
+        },
+        {
+          "key": "tunnel_id",
+          "description": "The VPN Tunnel ID."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/vpn_tunnel",
+      "launchStage": "ALPHA"
+    },
+    {
+      "type": "workflows.googleapis.com/Workflow",
+      "displayName": "Cloud Workflow",
+      "description": "Executable, persistent logic for orchestrating services.",
+      "labels": [
+        {
+          "key": "resource_container",
+          "description": "The identifier of the GCP container associated with the resource."
+        },
+        {
+          "key": "location",
+          "description": "The region in which the workflow is deployed."
+        },
+        {
+          "key": "workflow_id",
+          "description": "The ID of the workflow."
+        }
+      ],
+      "name": "projects/collibra-telemetry/monitoredResourceDescriptors/workflows.googleapis.com/Workflow",
+      "launchStage": "BETA"
+    }
+  ]
+}
