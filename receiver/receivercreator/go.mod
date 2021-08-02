@@ -14,7 +14,7 @@ require (
 	github.com/onsi/gomega v1.10.2 // indirect
 	github.com/open-telemetry/opentelemetry-collector-contrib/extension/observer v0.0.0-00010101000000-000000000000
 	github.com/pelletier/go-toml v1.8.0 // indirect
-	github.com/spf13/cast v1.3.1
+	github.com/spf13/cast v1.4.0
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
 	go.opentelemetry.io/collector v0.23.1-0.20210329172532-38e57614135f
