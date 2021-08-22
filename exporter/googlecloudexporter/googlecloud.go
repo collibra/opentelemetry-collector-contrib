@@ -238,7 +238,7 @@ func newGoogleCloudLogsExporter(cfg *Config, params component.ExporterCreateSett
 
 	return exporterhelper.NewLogsExporter(
 		cfg,
-		params.Logger,
+		params,
 		mExp.pushLogs,
 		//exporterhelper.WithShutdown(mExp.Shutdown),
 		// Disable exporterhelper Timeout, since we are using a custom mechanism
