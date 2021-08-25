@@ -234,7 +234,6 @@ func newGoogleCloudLogsExporter(cfg *Config, params component.ExporterCreateSett
 	mExp := &logsExporter{
 		lexporter: internal.NewGoogleLogging(context.Background(), cfg.ProjectID),
 	}
-	mExp.lexporter.LogName = cfg.LogsConfig.LogName
 
 	return exporterhelper.NewLogsExporter(
 		cfg,
@@ -335,6 +334,6 @@ func (te *logsExporter) pushLogs(ctx context.Context, td pdata.Logs) error {
 		rl := te.lexporter.ToLogEntries(resourceLogs)
 		batch.Append(rl)
 	}
-	batch.WriteBatch()
+	batch.WriteBatches()
 	return nil
 }

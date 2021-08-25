@@ -67,5 +67,25 @@ type LabelMapping struct {
 }
 
 type LogsConfig struct {
-	LogName string `mapstructure:"log_name"`
+	Resources []LogResource `mapstructure:"resources"`
+}
+
+type LogResource struct {
+	Type           string         `mapstructure:"type"`
+	Name           string         `mapstructure:"name"`
+	Match          LogMatch         `mapstructure:"match"`
+	ResourceLabels []LogOperation `mapstructure:"resource_labels"`
+	LogLabels      []LogOperation `mapstructure:"log_labels"`
+}
+
+type LogOperation struct {
+	Operation string `mapstructure:"operation"`
+	From      string `mapstructure:"from"`
+	To        string `mapstructure:"to"`
+}
+
+type LogMatch struct {
+	Operation string `mapstructure:"operation"`
+	Key      string `mapstructure:"key"`
+	Value        string `mapstructure:"value"`
 }

@@ -30,7 +30,6 @@ import (
 
 type GoogleLogging struct {
 	ProjectID string
-	LogName   string
 	client    *cloudlogging.Client
 }
 
@@ -50,27 +49,41 @@ type GoogleLoggingBatch struct {
 
 func (b *GoogleLoggingBatch) Append(rl []*loggingpb.LogEntry) {
 	b.logEntries = append(b.logEntries, rl...)
-
-	fmt.Printf("Append %v\n", len(b.logEntries))
 }
 
-func (b *GoogleLoggingBatch) WriteBatch() {
-	fmt.Printf("WriteBatch %v\n", len(b.logEntries))
+func (b *GoogleLoggingBatch) WriteBatches() {
+	logMap := make(map[string][]*loggingpb.LogEntry)
+	for i := range b.logEntries {
+		entry := b.logEntries[i]
+		logName := entry.LogName
+		entries, ok := logMap[logName]
+		if !ok {
+			entries = []*loggingpb.LogEntry{entry}
+		} else {
+			entries = append(entries, entry)
+		}
+		logMap[logName] = entries
+	}
+	for logName, entries := range logMap {
+		b.writeBatch(logName, entries)
+	}
+}
+
+func (b *GoogleLoggingBatch) writeBatch(logName string, entries []*loggingpb.LogEntry) {
 	request := loggingpb.WriteLogEntriesRequest{
-		LogName: b.exporter.LogName,
-		Entries: b.logEntries,
+		LogName: logName,
+		Entries: entries,
 	}
 
 	response, err := b.exporter.client.WriteLogEntries(
 		context.TODO(),
 		&request,
 	)
+	_ = err
 	_ = response
-	fmt.Printf("%v\n", err)
 }
 
 func (gl *GoogleLogging) NewBatch() *GoogleLoggingBatch {
-	fmt.Printf("NewBatch %v\n", 0)
 	return &GoogleLoggingBatch{
 		exporter:   gl,
 		logEntries: make([]*loggingpb.LogEntry, 0),
@@ -90,13 +103,11 @@ func (gl *GoogleLogging) ToLogEntries(logs pdata.ResourceLogs) []*loggingpb.LogE
 		//logEntries = append(logEntries, rl...)
 	}
 
-	logs.InstrumentationLibraryLogs()
-
 	return logEnties
 
 }
 
-func (gl *GoogleLogging) addBodyToPayload(entry *loggingpb.LogEntry, value pdata.AttributeValue) error {
+func (gl *GoogleLogging) addBodyToPayload(entry *loggingpb.LogEntry, value pdata.AttributeValue, service string) error {
 	switch value.Type() {
 	case pdata.AttributeValueTypeString:
 		entry.Payload = &loggingpb.LogEntry_TextPayload{
@@ -110,7 +121,13 @@ func (gl *GoogleLogging) addBodyToPayload(entry *loggingpb.LogEntry, value pdata
 	case pdata.AttributeValueTypeBool:
 		break
 	case pdata.AttributeValueTypeMap:
-		json, _ := gl.attributeMapToStruct(value.MapVal())
+		converted := gl.treeWalker(value.MapVal())
+		if converted["serviceContext"] == nil && service != "" {
+			converted["serviceContext"] = map[string]interface{} {
+				"service": service,
+			}
+		}
+		json, _ := structpb.NewStruct(converted)
 		entry.Payload = &loggingpb.LogEntry_JsonPayload{
 			JsonPayload: json,
 		}
@@ -120,6 +137,27 @@ func (gl *GoogleLogging) addBodyToPayload(entry *loggingpb.LogEntry, value pdata
 	case pdata.AttributeValueTypeNull:
 	}
 	return nil
+}
+
+func (gl *GoogleLogging) treeWalker(attrMap pdata.AttributeMap) map[string]interface{} {
+	out := make(map[string]interface{}, attrMap.Len())
+
+	attrMap.Range(func(key string, value pdata.AttributeValue) bool {
+		switch value.Type() {
+		case pdata.AttributeValueTypeMap:
+			out[key] = gl.treeWalker(value.MapVal())
+		case pdata.AttributeValueTypeString:
+			out[key] = value.StringVal()
+		case pdata.AttributeValueTypeBool:
+			out[key] = value.BoolVal()
+		case pdata.AttributeValueTypeDouble:
+			out[key] = value.DoubleVal()
+		case pdata.AttributeValueTypeInt:
+			out[key] = value.IntVal()
+		}
+		return true
+	})
+	return out
 }
 
 func (gl *GoogleLogging) addTraceToLogEntry(entry *loggingpb.LogEntry, logRecord pdata.LogRecord) {
@@ -137,51 +175,57 @@ func (gl *GoogleLogging) addTraceToLogEntry(entry *loggingpb.LogEntry, logRecord
 	}
 }
 
-func (gl *GoogleLogging) attributeMapToStruct(val pdata.AttributeMap) (*structpb.Struct, error) {
-	entries := make(map[string]interface{}, val.Len())
-	val.Range(func(k string, v pdata.AttributeValue) bool {
-		entries[k] = v.StringVal()
-		return true
-	})
-	return structpb.NewStruct(entries)
-}
-
 func (gl *GoogleLogging) ExtractResource(logs pdata.ResourceLogs, logRecord pdata.LogRecord) *monitoredres.MonitoredResource {
 
 	monitoredResource := &monitoredres.MonitoredResource{Type: "global"}
+	//fileName, ok := logRecord.Attributes().Get("file_name")
+	//if !ok {
+	//	fileName, ok = logRecord.Attributes().Get("file.name")
+	//}
+	//job := ""
+	//if ok {
+	//	value := fileName.StringVal()
+	//	if strings.Contains(value, "postgresql") {
+	//		job = "postgresql"
+	//	} else if strings.Contains(value,"dgc") {
+	//		job = "dgc"
+	//	} else if strings.Contains(value,"console") {
+	//		job = "console"
+	//	}
+	//}
 
-	value, ok := logRecord.Attributes().Get("file_name")
-	if ok && "dgc.jsonl" == value.StringVal() {
-		monitoredResource.Type = "generic_task"
-		monitoredResource.Labels = map[string]string{
-			"project_id": "collibra-telemetry",
-			"job":        "dgc",
-		}
-		zone, _ := logs.Resource().Attributes().Get("cloud.availability_zone")
-		accountId, _ := logs.Resource().Attributes().Get("cloud.account.id")
-		if ok {
-			monitoredResource.Labels["location"] = fmt.Sprintf("aws:%s:%s", accountId.StringVal(), zone.StringVal())
-		}
-		envName, _ := logs.Resource().Attributes().Get("collibra.instance.environment_name")
-		if ok {
-			monitoredResource.Labels["namespace"] = envName.StringVal()
-		}
-		value, ok = logs.Resource().Attributes().Get("host.id")
-		if ok {
-			monitoredResource.Labels["task_id"] = value.StringVal()
-		}
-	}
+	//if job != "" {
+	//	monitoredResource.Type = "generic_task"
+	//	monitoredResource.Labels = map[string]string{
+	//		"project_id": "collibra-telemetry",
+	//		"job":        job,
+	//	}
+	//	zone, _ := logs.Resource().Attributes().Get("cloud.availability_zone")
+	//	accountId, _ := logs.Resource().Attributes().Get("cloud.account.id")
+	//	if ok {
+	//		monitoredResource.Labels["location"] = fmt.Sprintf("aws:%s:%s", accountId.StringVal(), zone.StringVal())
+	//	}
+	//	envName, _ := logs.Resource().Attributes().Get("collibra.instance.environment_name")
+	//	if ok {
+	//		monitoredResource.Labels["namespace"] = envName.StringVal()
+	//	}
+	//	value, ok := logs.Resource().Attributes().Get("host.id")
+	//	if ok {
+	//		monitoredResource.Labels["task_id"] = value.StringVal()
+	//	}
+	//}
 
 	return monitoredResource
 }
 
 func (gl *GoogleLogging) ToLabels(logs pdata.ResourceLogs, il pdata.InstrumentationLibraryLogs, logRecord pdata.LogRecord) map[string]string {
 	labels := map[string]string{}
-	logRecord.Attributes().Range(func(k string, v pdata.AttributeValue) bool {
+	logs.Resource().Attributes().Range(func(k string, v pdata.AttributeValue) bool {
 		labels[k] = v.StringVal()
 		return true
 	})
-	logs.Resource().Attributes().Range(func(k string, v pdata.AttributeValue) bool {
+	// message attributes take precedence over resource attributes
+	logRecord.Attributes().Range(func(k string, v pdata.AttributeValue) bool {
 		labels[k] = v.StringVal()
 		return true
 	})
@@ -202,18 +246,52 @@ func (gl *GoogleLogging) ToLogEntry(logs pdata.ResourceLogs, il pdata.Instrument
 			Seconds: logRecord.Timestamp().AsTime().Unix(),
 			Nanos:   int32(logRecord.Timestamp().AsTime().Nanosecond()),
 		},
-		LogName:  gl.LogName,
 		Labels:   gl.ToLabels(logs, il, logRecord),
 		Resource: monitoredResource,
 	}
 	fileName, ok := logRecord.Attributes().Get("file_name")
-	if ok {
-		gl.LogName = fmt.Sprintf("projects/collibra-telemetry/logs/%s", fileName.StringVal())
-	} else {
-		fmt.Printf("dhu?")
+	if !ok {
+		fileName, ok = logRecord.Attributes().Get("file.name")
 	}
+	logName := "unknown"
+	service := ""
+	if ok {
+		value := fileName.StringVal()
+		if strings.HasPrefix(value, "postgresql") {
+			logName = "postgresql"
+			service = "postgresql"
+		} else if strings.HasPrefix(value, "dgc") {
+			logName = "dgc"
+			service = "dgc"
+		} else if strings.HasPrefix(value, "json_access") {
+			logName = "apache-access"
+			service = "apache"
+		} else if strings.HasPrefix(value, "json_error") {
+			logName = "apache-error"
+			service = "apache"
+		} else if strings.HasPrefix(value, "console") {
+			logName = "console"
+			service = "console"
+		} else if strings.HasPrefix(value, "agent") {
+			logName = "agent"
+			service = "agent"
+		} else if strings.HasPrefix(value, "istio.err") {
+			logName = "istio-vm-error"
+			service = "istio"
+		} else if strings.HasPrefix(value, "istio") {
+			logName = "istio-vm-access"
+			service = "istip"
+		} else if strings.HasPrefix(value, "spark-job-server") {
+			logName = "spark-job-server"
+			service = "spark-job-server"
+		} else if strings.HasPrefix(value, "yum") {
+			logName = "yum"
+			service = "yum"
+		}
+	}
+	entry.LogName = fmt.Sprintf("projects/collibra-telemetry/logs/%s", logName)
 
-	gl.addBodyToPayload(entry, logRecord.Body())
+	gl.addBodyToPayload(entry, logRecord.Body(), service)
 	gl.addTraceToLogEntry(entry, logRecord)
 	switch strings.ToUpper(logRecord.SeverityText()) {
 	case "TRACE":
