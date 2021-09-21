@@ -41,11 +41,27 @@ type Config struct {
 
 	// The fully qualified resource name of the Pubsub topic
 	Topic string `mapstructure:"topic"`
+	// Lock down the encoding of the payload, leave empty for attribute based detection
+	Compression string `mapstructure:"compression"`
 }
 
 func (config *Config) validate() error {
 	if !topicMatcher.MatchString(config.Topic) {
 		return fmt.Errorf("topic '%s' is not a valid format, use 'projects/<project_id>/topics/<name>'", config.Topic)
 	}
+	switch config.Compression {
+	case "":
+	case "gzip":
+	default:
+		return fmt.Errorf("if specified, compression should be gzip")
+	}
 	return nil
+}
+
+func (config *Config) parseCompression() Compression {
+	switch config.Compression {
+	case "gzip":
+		return GZip
+	}
+	return Uncompressed
 }

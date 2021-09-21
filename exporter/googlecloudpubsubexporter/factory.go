@@ -54,9 +54,12 @@ func ensureExporter(params component.ExporterCreateSettings, pCfg *Config) *pubs
 		logger:       params.Logger,
 		userAgent:    strings.ReplaceAll(pCfg.UserAgent, "{{version}}", params.BuildInfo.Version),
 		ceSource:     fmt.Sprintf("/opentelemetry/collector/%s/%s", name, params.BuildInfo.Version),
+		ceCompression: pCfg.parseCompression(),
 		config:       pCfg,
 		topicName:    pCfg.Topic,
 	}
+
+
 	exporters[pCfg] = receiver
 	return receiver
 }

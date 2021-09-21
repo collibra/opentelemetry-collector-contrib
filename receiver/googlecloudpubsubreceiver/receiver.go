@@ -15,9 +15,12 @@
 package googlecloudpubsubreceiver
 
 import (
+	"bytes"
+	"compress/gzip"
 	"context"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"strings"
 	"sync"
 
@@ -56,11 +59,18 @@ type pubsubReceiver struct {
 type Encoding int
 
 const (
-	Unknown         = iota
-	OtlpProtoTrace  = iota
-	OtlpProtoMetric = iota
-	OtlpProtoLog    = iota
-	RawTextLog      = iota
+	Unknown         Encoding = iota
+	OtlpProtoTrace           = iota
+	OtlpProtoMetric          = iota
+	OtlpProtoLog             = iota
+	RawTextLog               = iota
+)
+
+type Compression int
+
+const (
+	Uncompressed Compression = iota
+	GZip                     = iota
 )
 
 func (receiver *pubsubReceiver) generateClientOptions() ([]option.ClientOption, error) {
@@ -138,35 +148,102 @@ func (receiver *pubsubReceiver) handleLogStrings(ctx context.Context, message *p
 	return receiver.logsConsumer.ConsumeLogs(ctx, out)
 }
 
-func (receiver *pubsubReceiver) detectEncoding(attributes map[string]string) (Encoding, error) {
-	if receiver.config.Encoding != "" {
-		switch receiver.config.Encoding {
-		case "otlp_proto_trace":
-			return OtlpProtoTrace, nil
-		case "otlp_proto_metric":
-			return OtlpProtoMetric, nil
-		case "otlp_proto_log":
-			return OtlpProtoLog, nil
-		case "raw_text":
-			return RawTextLog, nil
+func decompress(payload []byte, compression Compression) ([]byte, error) {
+	switch compression {
+	case GZip:
+		reader, err := gzip.NewReader(bytes.NewReader(payload))
+		if err != nil {
+			return nil, err
 		}
+		return ioutil.ReadAll(reader)
 	}
+	return payload, nil
+}
+
+func (receiver *pubsubReceiver) handleTrace(ctx context.Context, payload []byte, compression Compression) error {
+	payload, err := decompress(payload, compression)
+	otlpData, err := receiver.tracesUnmarshaler.UnmarshalTraces(payload)
+	count := otlpData.SpanCount()
+	if err != nil {
+		return err
+	}
+	ctx = receiver.obsrecv.StartTracesOp(ctx)
+	err = receiver.tracesConsumer.ConsumeTraces(ctx, otlpData)
+	receiver.obsrecv.EndTracesOp(ctx, reportFormatProtobuf, count, err)
+	return nil
+}
+
+func (receiver *pubsubReceiver) handleMatric(ctx context.Context, payload []byte, compression Compression) error {
+	payload, err := decompress(payload, compression)
+	otlpData, err := receiver.metricsUnmarshaler.UnmarshalMetrics(payload)
+	count := otlpData.MetricCount()
+	if err != nil {
+		return err
+	}
+	ctx = receiver.obsrecv.StartMetricsOp(ctx)
+	err = receiver.metricsConsumer.ConsumeMetrics(ctx, otlpData)
+	receiver.obsrecv.EndMetricsOp(ctx, reportFormatProtobuf, count, err)
+	return nil
+}
+
+func (receiver *pubsubReceiver) handleLog(ctx context.Context, payload []byte, compression Compression) error {
+	payload, err := decompress(payload, compression)
+	otlpData, err := receiver.logsUnmarshaler.UnmarshalLogs(payload)
+	count := otlpData.LogRecordCount()
+	if err != nil {
+		return err
+	}
+	ctx = receiver.obsrecv.StartLogsOp(ctx)
+	err = receiver.logsConsumer.ConsumeLogs(ctx, otlpData)
+	receiver.obsrecv.EndLogsOp(ctx, reportFormatProtobuf, count, err)
+	return nil
+}
+
+func (receiver *pubsubReceiver) detectEncoding(attributes map[string]string) (Encoding, Compression, error) {
+	otlpEncoding := Unknown
+	otlpCompression := Uncompressed
 
 	ceType := attributes["ce-type"]
 	ceContentType := attributes["content-type"]
 	if strings.HasSuffix(ceContentType, "application/protobuf") {
 		switch ceType {
 		case "org.opentelemetry.otlp.traces.v1":
-			return OtlpProtoTrace, nil
+			otlpEncoding = OtlpProtoTrace
 		case "org.opentelemetry.otlp.metrics.v1":
-			return OtlpProtoMetric, nil
+			otlpEncoding = OtlpProtoMetric
 		case "org.opentelemetry.otlp.logs.v1":
-			return OtlpProtoLog, nil
+			otlpEncoding = OtlpProtoLog
 		}
 	} else if strings.HasSuffix(ceContentType, "text/plain") {
-		return RawTextLog, nil
+		otlpEncoding = RawTextLog
 	}
-	return Unknown, nil
+
+	if otlpEncoding == Unknown && receiver.config.Encoding != "" {
+		switch receiver.config.Encoding {
+		case "otlp_proto_trace":
+			otlpEncoding = OtlpProtoTrace
+		case "otlp_proto_metric":
+			otlpEncoding = OtlpProtoMetric
+		case "otlp_proto_log":
+			otlpEncoding = OtlpProtoLog
+		case "raw_text":
+			otlpEncoding = RawTextLog
+		}
+	}
+
+	ceContentEncoding := attributes["content-encoding"]
+	switch ceContentEncoding {
+	case "gzip":
+		otlpCompression = GZip
+	}
+
+	if otlpCompression == Uncompressed && receiver.config.Compression != "" {
+		switch receiver.config.Compression {
+		case "gzip":
+			otlpCompression = GZip
+		}
+	}
+	return otlpEncoding, otlpCompression, nil
 }
 
 func (receiver *pubsubReceiver) createReceiverHandler(ctx context.Context) error {
@@ -178,41 +255,21 @@ func (receiver *pubsubReceiver) createReceiverHandler(ctx context.Context) error
 		receiver.config.ClientID,
 		receiver.config.Subscription,
 		func(ctx context.Context, message *pubsubpb.ReceivedMessage) error {
+			payload := message.Message.Data
+			encoding, compression, err := receiver.detectEncoding(message.Message.Attributes)
 
-			encoding, err := receiver.detectEncoding(message.Message.Attributes)
 			switch encoding {
 			case OtlpProtoTrace:
 				if receiver.tracesConsumer != nil {
-					otlpData, err := receiver.tracesUnmarshaler.UnmarshalTraces(message.Message.Data)
-					count := otlpData.SpanCount()
-					if err != nil {
-						return err
-					}
-					ctx = receiver.obsrecv.StartTracesOp(ctx)
-					err = receiver.tracesConsumer.ConsumeTraces(ctx, otlpData)
-					receiver.obsrecv.EndTracesOp(ctx, reportFormatProtobuf, count, err)
+					return receiver.handleTrace(ctx, payload, compression)
 				}
 			case OtlpProtoMetric:
 				if receiver.metricsConsumer != nil {
-					otlpData, err := receiver.metricsUnmarshaler.UnmarshalMetrics(message.Message.Data)
-					count := otlpData.MetricCount()
-					if err != nil {
-						return err
-					}
-					ctx = receiver.obsrecv.StartMetricsOp(ctx)
-					err = receiver.metricsConsumer.ConsumeMetrics(ctx, otlpData)
-					receiver.obsrecv.EndMetricsOp(ctx, reportFormatProtobuf, count, err)
+					return receiver.handleMatric(ctx, payload, compression)
 				}
 			case OtlpProtoLog:
 				if receiver.logsConsumer != nil {
-					otlpData, err := receiver.logsUnmarshaler.UnmarshalLogs(message.Message.Data)
-					count := otlpData.LogRecordCount()
-					if err != nil {
-						return err
-					}
-					ctx = receiver.obsrecv.StartLogsOp(ctx)
-					err = receiver.logsConsumer.ConsumeLogs(ctx, otlpData)
-					receiver.obsrecv.EndLogsOp(ctx, reportFormatProtobuf, count, err)
+					return receiver.handleLog(ctx, payload, compression)
 				}
 			case RawTextLog:
 				return receiver.handleLogStrings(ctx, message)

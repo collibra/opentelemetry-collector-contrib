@@ -15,6 +15,8 @@
 package googlecloudpubsubexporter
 
 import (
+	"bytes"
+	"compress/gzip"
 	"context"
 	"fmt"
 
@@ -39,6 +41,7 @@ type pubsubExporter struct {
 	cancel           context.CancelFunc
 	userAgent        string
 	ceSource         string
+	ceCompression    Compression
 	config           *Config
 	tracesMarshaler  pdata.TracesMarshaler
 	metricsMarshaler pdata.MetricsMarshaler
@@ -52,9 +55,16 @@ func (*pubsubExporter) Name() string {
 type Encoding int
 
 const (
-	OtlpProtoTrace  = iota
+	OtlpProtoTrace Encoding = iota
 	OtlpProtoMetric = iota
 	OtlpProtoLog    = iota
+)
+
+type Compression int
+
+const (
+	Uncompressed Compression = iota
+	GZip                     = iota
 )
 
 func (ex *pubsubExporter) start(ctx context.Context, _ component.Host) error {
@@ -121,6 +131,11 @@ func (ex *pubsubExporter) publishMessage(ctx context.Context, encoding Encoding,
 		attributes["ce-type"] = "org.opentelemetry.otlp.logs.v1"
 		attributes["content-type"] = "application/protobuf"
 	}
+	switch ex.ceCompression {
+	case GZip:
+		attributes["content-encoding"] = "gzip"
+		data, _ = ex.compress(ctx, data)
+	}
 	_, err := ex.client.Publish(ctx, &pubsubpb.PublishRequest{
 		Topic: ex.topicName,
 		Messages: []*pubsubpb.PubsubMessage{
@@ -131,6 +146,24 @@ func (ex *pubsubExporter) publishMessage(ctx context.Context, encoding Encoding,
 		},
 	})
 	return err
+}
+
+func (ex *pubsubExporter) compress(ctx context.Context, payload []byte) ([]byte, error) {
+	switch ex.ceCompression {
+	case GZip:
+		var buf bytes.Buffer
+		writer := gzip.NewWriter(&buf)
+		_, err := writer.Write(payload)
+		if err != nil {
+			return nil, err
+		}
+		err = writer.Close()
+		if err != nil {
+			return nil, err
+		}
+		return buf.Bytes(), nil
+	}
+	return payload, nil
 }
 
 func (ex *pubsubExporter) consumeTraces(ctx context.Context, traces pdata.Traces) error {
