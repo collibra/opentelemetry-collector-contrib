@@ -42,6 +42,7 @@ type Config struct {
 	GetClientOptions func() []option.ClientOption
 
 	MetricConfig MetricConfig `mapstructure:"metric"`
+	LogsConfig   LogsConfig   `mapstructure:"log"`
 }
 
 type MetricConfig struct {
@@ -63,4 +64,28 @@ type LabelMapping struct {
 	// Optional flag signals whether we can proceed with transformation if a label is missing in the resource.
 	// When required label is missing, we fallback to default resource mapping.
 	Optional bool `mapstructure:"optional"`
+}
+
+type LogsConfig struct {
+	Resources []LogResource `mapstructure:"resources"`
+}
+
+type LogResource struct {
+	Type           string         `mapstructure:"type"`
+	Name           string         `mapstructure:"name"`
+	Match          LogMatch         `mapstructure:"match"`
+	ResourceLabels []LogOperation `mapstructure:"resource_labels"`
+	LogLabels      []LogOperation `mapstructure:"log_labels"`
+}
+
+type LogOperation struct {
+	Operation string `mapstructure:"operation"`
+	From      string `mapstructure:"from"`
+	To        string `mapstructure:"to"`
+}
+
+type LogMatch struct {
+	Operation string `mapstructure:"operation"`
+	Key      string `mapstructure:"key"`
+	Value        string `mapstructure:"value"`
 }

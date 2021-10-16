@@ -111,6 +111,7 @@ require github.com/open-telemetry/opentelemetry-collector-contrib/receiver/mongo
 
 require (
 	cloud.google.com/go v0.97.0 // indirect
+	cloud.google.com/go/logging v1.4.2 // indirect
 	cloud.google.com/go/monitoring v0.1.0 // indirect
 	cloud.google.com/go/spanner v1.27.0 // indirect
 	cloud.google.com/go/trace v0.1.0 // indirect
@@ -457,6 +458,8 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/azure
 replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/carbonexporter => ./exporter/carbonexporter
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadogexporter => ./exporter/datadogexporter
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadoglogexporter => ./exporter/datadoglogexporter
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/dynatraceexporter => ./exporter/dynatraceexporter
 

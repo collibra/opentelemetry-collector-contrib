@@ -3,6 +3,7 @@ module github.com/open-telemetry/opentelemetry-collector-contrib/exporter/google
 go 1.17
 
 require (
+	cloud.google.com/go/logging v1.4.2
 	contrib.go.opencensus.io/exporter/stackdriver v0.13.8
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.0.0
 	github.com/census-instrumentation/opencensus-proto v0.3.0
