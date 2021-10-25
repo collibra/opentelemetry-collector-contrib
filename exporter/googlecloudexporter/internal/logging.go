@@ -17,11 +17,15 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/url"
+	"path/filepath"
 	"strings"
+
+	conventions "go.opentelemetry.io/collector/translator/conventions/v1.5.0"
 
 	cloudlogging "cloud.google.com/go/logging/apiv2"
 	"go.opentelemetry.io/collector/model/pdata"
-	monitoredres "google.golang.org/genproto/googleapis/api/monitoredres"
+	"google.golang.org/genproto/googleapis/api/monitoredres"
 	ltype "google.golang.org/genproto/googleapis/logging/type"
 	loggingpb "google.golang.org/genproto/googleapis/logging/v2"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -29,16 +33,75 @@ import (
 )
 
 type GoogleLogging struct {
+	// GCP project id
 	ProjectID string
-	client    *cloudlogging.Client
+	// List of labels/attributes to get the log name from
+	LogNameFrom []string
+	// If no log name can be found, defaults to this
+	DefaultLogName string
+	// List of labels/attributes to get the service name from
+	ServiceNameFrom []string
+	// List of labels/attributes to get the service version from
+	ServiceVersionFrom []string
+	// List of labels/attributes to get the file name from
+	FileNameFrom []string
+	// Kubernetes container name label
+	KubernetesContainerLabelFrom string
+	// Kubernetes labels mapping (format is from:to)
+	KubernetesLabelsMapping map[string]string
+
+	client *cloudlogging.Client
 }
+
+const (
+	// default GCP Log name
+	DefaultLogName string = "unknown"
+
+	// additional attributes
+	AttributeLogName            string = "log.name"
+	AttributeFileName           string = "file.name"
+	AttributeFileNameUnderscore string = "file_name"
+
+	// GCP resource types
+	GoogleResourceTypeGlobal              string = "global"
+	GoogleResourceTypeKubernetesContainer string = "k8s_container"
+
+	// GCP resource labels
+	GoogleResourceLabelProjectID     string = "project_id"
+	GoogleResourceLabelLocation      string = "location"
+	GoogleResourceLabelClusterName   string = "cluster_name"
+	GoogleResourceLabelNodeName      string = "node_name"
+	GoogleResourceLabelNamespaceName string = "namespace_name"
+	GoogleResourceLabelPodName       string = "pod_name"
+	GoogleResourceLabelContainerName string = "container_name"
+
+	// GCP Error reporting
+	GoogleServiceContext        string = "serviceContext"
+	GoogleServiceContextService string = "service"
+	GoogleServiceContextVersion string = "version"
+)
 
 func NewGoogleLogging(ctx context.Context, projectID string) *GoogleLogging {
 	client, _ := cloudlogging.NewClient(ctx)
-
+	// inject configuration if needed here
 	return &GoogleLogging{
-		ProjectID: projectID,
-		client:    client,
+		ProjectID:                    projectID,
+		LogNameFrom:                  []string{AttributeLogName, conventions.AttributeServiceName, conventions.AttributeK8SContainerName, conventions.AttributeK8SPodName},
+		DefaultLogName:               DefaultLogName,
+		ServiceNameFrom:              []string{conventions.AttributeServiceName, AttributeLogName, conventions.AttributeK8SContainerName, conventions.AttributeK8SPodName},
+		ServiceVersionFrom:           []string{conventions.AttributeServiceVersion},
+		FileNameFrom:                 []string{AttributeFileName, AttributeFileNameUnderscore},
+		KubernetesContainerLabelFrom: conventions.AttributeK8SContainerName,
+		KubernetesLabelsMapping: map[string]string{
+			conventions.AttributeCloudAccountID:        GoogleResourceLabelProjectID,
+			conventions.AttributeCloudAvailabilityZone: GoogleResourceLabelLocation,
+			conventions.AttributeK8SClusterName:        GoogleResourceLabelClusterName,
+			conventions.AttributeK8SNodeName:           GoogleResourceLabelNodeName,
+			conventions.AttributeK8SNamespaceName:      GoogleResourceLabelNamespaceName,
+			conventions.AttributeK8SPodName:            GoogleResourceLabelPodName,
+			conventions.AttributeK8SContainerName:      GoogleResourceLabelContainerName,
+		},
+		client: client,
 	}
 }
 
@@ -55,14 +118,13 @@ func (b *GoogleLoggingBatch) WriteBatches() {
 	logMap := make(map[string][]*loggingpb.LogEntry)
 	for i := range b.logEntries {
 		entry := b.logEntries[i]
-		logName := entry.LogName
-		entries, ok := logMap[logName]
+		entries, ok := logMap[entry.LogName]
 		if !ok {
 			entries = []*loggingpb.LogEntry{entry}
 		} else {
 			entries = append(entries, entry)
 		}
-		logMap[logName] = entries
+		logMap[entry.LogName] = entries
 	}
 	for logName, entries := range logMap {
 		b.writeBatch(logName, entries)
@@ -79,8 +141,11 @@ func (b *GoogleLoggingBatch) writeBatch(logName string, entries []*loggingpb.Log
 		context.TODO(),
 		&request,
 	)
-	_ = err
-	_ = response
+	if err != nil {
+		// TODO log error here
+	} else {
+		_ = response
+	}
 }
 
 func (gl *GoogleLogging) NewBatch() *GoogleLoggingBatch {
@@ -92,73 +157,119 @@ func (gl *GoogleLogging) NewBatch() *GoogleLoggingBatch {
 
 func (gl *GoogleLogging) ToLogEntries(logs pdata.ResourceLogs) []*loggingpb.LogEntry {
 	il := logs.InstrumentationLibraryLogs()
-	logEnties := make([]*loggingpb.LogEntry, 0)
+	logEntries := make([]*loggingpb.LogEntry, 0)
 	for i := 0; i < il.Len(); i++ {
 		l := il.At(i)
 		logSlice := l.Logs()
 		for j := 0; j < logSlice.Len(); j++ {
-			logEnties = append(logEnties, gl.ToLogEntry(logs, l, logSlice.At(j)))
+			logEntries = append(logEntries, gl.ToLogEntry(logs, l, logSlice.At(j)))
 		}
-		//rl := te.lexporter.ToLogEntries(l.)
-		//logEntries = append(logEntries, rl...)
 	}
-
-	return logEnties
-
+	return logEntries
 }
 
-func (gl *GoogleLogging) addBodyToPayload(entry *loggingpb.LogEntry, value pdata.AttributeValue, service string) error {
+func (gl *GoogleLogging) Shutdown(context.Context) error {
+	return gl.client.Close()
+}
+
+func (gl *GoogleLogging) ToLogEntry(logs pdata.ResourceLogs, il pdata.InstrumentationLibraryLogs, logRecord pdata.LogRecord) *loggingpb.LogEntry {
+	// default resource
+	monitoredResource := &monitoredres.MonitoredResource{Type: GoogleResourceTypeGlobal}
+
+	labels := extractLabels(logs, il, logRecord)
+
+	// convert to Kubernetes container resource
+	if container, found := labels[gl.KubernetesContainerLabelFrom]; found && container != "" {
+		monitoredResource = gl.getKubernetesContainerResource(labels)
+	}
+
+	entry := &loggingpb.LogEntry{
+		Timestamp: &timestamppb.Timestamp{
+			Seconds: logRecord.Timestamp().AsTime().Unix(),
+			Nanos:   int32(logRecord.Timestamp().AsTime().Nanosecond()),
+		},
+		Labels:         labels,
+		Resource:       monitoredResource,
+		LogName:        gl.getLogName(labels),
+		Severity:       getSeverity(logRecord.SeverityText()),
+		HttpRequest:    getHTTPRequest(logRecord),
+		SourceLocation: getSourceLocation(logRecord),
+	}
+
+	// build a service context
+	var serviceContext map[string]interface{}
+	if serviceName, found := getFirstNotEmptyLabel(labels, gl.ServiceNameFrom); found {
+		serviceContext = gl.getServiceContext(serviceName, labels)
+	}
+
+	// build the body
+	if err := gl.addBodyToLogEntry(entry, logRecord.Body(), serviceContext); err != nil {
+		// TODO log error
+		_ = err
+	}
+
+	// add trace data
+	gl.addTraceToLogEntry(entry, logRecord)
+
+	return entry
+}
+
+// See https://cloud.google.com/logging/docs/api/v2/resource-list#resource-types
+func (gl *GoogleLogging) getKubernetesContainerResource(labels map[string]string) *monitoredres.MonitoredResource {
+	k8sLabels := map[string]string{}
+	for from, to := range gl.KubernetesLabelsMapping {
+		if v, found := labels[from]; found && v != "" {
+			k8sLabels[to] = v
+		}
+	}
+	return &monitoredres.MonitoredResource{Type: GoogleResourceTypeKubernetesContainer, Labels: k8sLabels}
+}
+
+func (gl *GoogleLogging) getLogName(labels map[string]string) string {
+	logName, found := getFirstNotEmptyLabel(labels, gl.LogNameFrom)
+	if !found {
+		if fileName, found := getFirstNotEmptyLabel(labels, gl.FileNameFrom); found {
+			logName = strings.TrimSuffix(fileName, filepath.Ext(fileName))
+			if idx := strings.Index(fileName, "-"); idx >= 0 {
+				logName = logName[:idx]
+			}
+		} else {
+			logName = gl.DefaultLogName
+		}
+	}
+	return fmt.Sprintf("projects/%s/logs/%s", gl.ProjectID, url.QueryEscape(logName))
+}
+
+func (gl *GoogleLogging) addBodyToLogEntry(entry *loggingpb.LogEntry, value pdata.AttributeValue, serviceContext map[string]interface{}) error {
 	switch value.Type() {
 	case pdata.AttributeValueTypeString:
+		// TODO detect JSON payload?
 		entry.Payload = &loggingpb.LogEntry_TextPayload{
 			TextPayload: value.StringVal(),
 		}
-		break
-	case pdata.AttributeValueTypeInt:
-		break
-	case pdata.AttributeValueTypeDouble:
-		break
-	case pdata.AttributeValueTypeBool:
-		break
 	case pdata.AttributeValueTypeMap:
-		converted := gl.treeWalker(value.MapVal())
-		if converted["serviceContext"] == nil && service != "" {
-			converted["serviceContext"] = map[string]interface{} {
-				"service": service,
-			}
+		converted := pdata.AttributeMapToMap(value.MapVal())
+
+		// inject service context for GCP Error reporting
+		if converted[GoogleServiceContext] == nil && len(serviceContext) > 0 {
+			converted[GoogleServiceContext] = serviceContext
 		}
-		json, _ := structpb.NewStruct(converted)
+
+		json, err := structpb.NewStruct(converted)
+		if err != nil {
+			return err
+		}
+
 		entry.Payload = &loggingpb.LogEntry_JsonPayload{
 			JsonPayload: json,
 		}
-		break
+	case pdata.AttributeValueTypeInt:
+	case pdata.AttributeValueTypeDouble:
+	case pdata.AttributeValueTypeBool:
 	case pdata.AttributeValueTypeArray:
-		break
-	case pdata.AttributeValueTypeEmpty:
-		break
+	case pdata.AttributeValueTypeNull:
 	}
 	return nil
-}
-
-func (gl *GoogleLogging) treeWalker(attrMap pdata.AttributeMap) map[string]interface{} {
-	out := make(map[string]interface{}, attrMap.Len())
-
-	attrMap.Range(func(key string, value pdata.AttributeValue) bool {
-		switch value.Type() {
-		case pdata.AttributeValueTypeMap:
-			out[key] = gl.treeWalker(value.MapVal())
-		case pdata.AttributeValueTypeString:
-			out[key] = value.StringVal()
-		case pdata.AttributeValueTypeBool:
-			out[key] = value.BoolVal()
-		case pdata.AttributeValueTypeDouble:
-			out[key] = value.DoubleVal()
-		case pdata.AttributeValueTypeInt:
-			out[key] = value.IntVal()
-		}
-		return true
-	})
-	return out
 }
 
 func (gl *GoogleLogging) addTraceToLogEntry(entry *loggingpb.LogEntry, logRecord pdata.LogRecord) {
@@ -176,50 +287,7 @@ func (gl *GoogleLogging) addTraceToLogEntry(entry *loggingpb.LogEntry, logRecord
 	}
 }
 
-func (gl *GoogleLogging) ExtractResource(logs pdata.ResourceLogs, logRecord pdata.LogRecord) *monitoredres.MonitoredResource {
-
-	monitoredResource := &monitoredres.MonitoredResource{Type: "global"}
-	//fileName, ok := logRecord.Attributes().Get("file_name")
-	//if !ok {
-	//	fileName, ok = logRecord.Attributes().Get("file.name")
-	//}
-	//job := ""
-	//if ok {
-	//	value := fileName.StringVal()
-	//	if strings.Contains(value, "postgresql") {
-	//		job = "postgresql"
-	//	} else if strings.Contains(value,"dgc") {
-	//		job = "dgc"
-	//	} else if strings.Contains(value,"console") {
-	//		job = "console"
-	//	}
-	//}
-
-	//if job != "" {
-	//	monitoredResource.Type = "generic_task"
-	//	monitoredResource.Labels = map[string]string{
-	//		"project_id": "collibra-telemetry",
-	//		"job":        job,
-	//	}
-	//	zone, _ := logs.Resource().Attributes().Get("cloud.availability_zone")
-	//	accountId, _ := logs.Resource().Attributes().Get("cloud.account.id")
-	//	if ok {
-	//		monitoredResource.Labels["location"] = fmt.Sprintf("aws:%s:%s", accountId.StringVal(), zone.StringVal())
-	//	}
-	//	envName, _ := logs.Resource().Attributes().Get("collibra.instance.environment_name")
-	//	if ok {
-	//		monitoredResource.Labels["namespace"] = envName.StringVal()
-	//	}
-	//	value, ok := logs.Resource().Attributes().Get("host.id")
-	//	if ok {
-	//		monitoredResource.Labels["task_id"] = value.StringVal()
-	//	}
-	//}
-
-	return monitoredResource
-}
-
-func (gl *GoogleLogging) ToLabels(logs pdata.ResourceLogs, il pdata.InstrumentationLibraryLogs, logRecord pdata.LogRecord) map[string]string {
+func extractLabels(logs pdata.ResourceLogs, il pdata.InstrumentationLibraryLogs, logRecord pdata.LogRecord) map[string]string {
 	labels := map[string]string{}
 	logs.Resource().Attributes().Range(func(k string, v pdata.AttributeValue) bool {
 		labels[k] = v.StringVal()
@@ -239,110 +307,57 @@ func (gl *GoogleLogging) ToLabels(logs pdata.ResourceLogs, il pdata.Instrumentat
 	return labels
 }
 
-func (gl *GoogleLogging) ToLogEntry(logs pdata.ResourceLogs, il pdata.InstrumentationLibraryLogs, logRecord pdata.LogRecord) *loggingpb.LogEntry {
+func getSeverity(severityText string) ltype.LogSeverity {
+	severity := ltype.LogSeverity_DEFAULT
+	switch severityText = strings.ToUpper(severityText); {
+	case strings.HasPrefix(severityText, "TRACE"):
+		severity = ltype.LogSeverity_DEFAULT
+	case strings.HasPrefix(severityText, "DEBUG"):
+		severity = ltype.LogSeverity_DEBUG
+	case strings.HasPrefix(severityText, "INFO"):
+		severity = ltype.LogSeverity_INFO
+	case strings.HasPrefix(severityText, "WARN"):
+		severity = ltype.LogSeverity_WARNING
+	case strings.HasPrefix(severityText, "ERROR"):
+		severity = ltype.LogSeverity_ERROR
+	case strings.HasPrefix(severityText, "FATAL"):
+		severity = ltype.LogSeverity_CRITICAL
+	}
+	return severity
+}
 
-	monitoredResource := gl.ExtractResource(logs, logRecord)
-	entry := &loggingpb.LogEntry{
-		Timestamp: &timestamppb.Timestamp{
-			Seconds: logRecord.Timestamp().AsTime().Unix(),
-			Nanos:   int32(logRecord.Timestamp().AsTime().Nanosecond()),
-		},
-		Labels:   gl.ToLabels(logs, il, logRecord),
-		Resource: monitoredResource,
+// create service context for GCP Error reporting
+// ref: https://cloud.google.com/error-reporting/docs/formatting-error-messages
+func (gl *GoogleLogging) getServiceContext(serviceName string, labels map[string]string) map[string]interface{} {
+	serviceContext := map[string]interface{}{
+		GoogleServiceContextService: serviceName,
 	}
-	fileName, ok := logRecord.Attributes().Get("file_name")
-	if !ok {
-		fileName, ok = logRecord.Attributes().Get("file.name")
+	if version, found := getFirstNotEmptyLabel(labels, gl.ServiceVersionFrom); found {
+		serviceContext[GoogleServiceContextVersion] = version
 	}
-	logName := "unknown"
-	service := ""
-	if ok {
-		value := fileName.StringVal()
-		if strings.HasPrefix(value, "postgresql") {
-			logName = "postgresql"
-			service = "postgresql"
-		} else if strings.HasPrefix(value, "dgc") {
-			logName = "dgc"
-			service = "dgc"
-		} else if strings.HasPrefix(value, "json_access") {
-			logName = "apache-access"
-			service = "apache"
-		} else if strings.HasPrefix(value, "json_error") {
-			logName = "apache-error"
-			service = "apache"
-		} else if strings.HasPrefix(value, "console") {
-			logName = "console"
-			service = "console"
-		} else if strings.HasPrefix(value, "agent") {
-			logName = "agent"
-			service = "agent"
-		} else if strings.HasPrefix(value, "istio.err") {
-			logName = "istio-vm-error"
-			service = "istio"
-		} else if strings.HasPrefix(value, "istio") {
-			logName = "istio-vm-access"
-			service = "istip"
-		} else if strings.HasPrefix(value, "spark-job-server") {
-			logName = "spark-job-server"
-			service = "spark-job-server"
-		} else if strings.HasPrefix(value, "yum") {
-			logName = "yum"
-			service = "yum"
+	return serviceContext
+}
+
+// ref. https://pkg.go.dev/google.golang.org/genproto@v0.0.0-20211019152133-63b7e35f4404/googleapis/logging/type#HttpRequest
+func getHTTPRequest(logRecord pdata.LogRecord) *ltype.HttpRequest {
+	// To be implemented
+	return nil
+}
+
+// ref. https://pkg.go.dev/google.golang.org/genproto/googleapis/logging/v2?utm_source=gopls#LogEntrySourceLocation
+func getSourceLocation(logRecord pdata.LogRecord) *loggingpb.LogEntrySourceLocation {
+	// To be implemented
+	return nil
+}
+
+// getFirstNotEmptyLabel finds the first not empty label in the provided labels from the list of keys
+// returns the value and a bool to know if a not empty value has been found
+func getFirstNotEmptyLabel(labels map[string]string, keys []string) (string, bool) {
+	for i := range keys {
+		key := keys[i]
+		if value, found := labels[key]; found && value != "" {
+			return value, true
 		}
 	}
-	entry.LogName = fmt.Sprintf("projects/collibra-telemetry/logs/%s", logName)
-
-	gl.addBodyToPayload(entry, logRecord.Body(), service)
-	gl.addTraceToLogEntry(entry, logRecord)
-	switch strings.ToUpper(logRecord.SeverityText()) {
-	case "TRACE":
-		entry.Severity = ltype.LogSeverity_DEFAULT
-	case "TRACE2":
-		entry.Severity = ltype.LogSeverity_DEFAULT
-	case "TRACE3":
-		entry.Severity = ltype.LogSeverity_DEFAULT
-	case "TRACE4":
-		entry.Severity = ltype.LogSeverity_DEFAULT
-	case "DEBUG":
-		entry.Severity = ltype.LogSeverity_DEBUG
-	case "DEBUG2":
-		entry.Severity = ltype.LogSeverity_DEBUG
-	case "DEBUG3":
-		entry.Severity = ltype.LogSeverity_DEBUG
-	case "DEBUG4":
-		entry.Severity = ltype.LogSeverity_DEBUG
-	case "INFO":
-		entry.Severity = ltype.LogSeverity_INFO
-	case "INFO2":
-		entry.Severity = ltype.LogSeverity_INFO
-	case "INFO3":
-		entry.Severity = ltype.LogSeverity_INFO
-	case "INFO4":
-		entry.Severity = ltype.LogSeverity_INFO
-	case "WARN":
-		entry.Severity = ltype.LogSeverity_WARNING
-	case "WARN2":
-		entry.Severity = ltype.LogSeverity_WARNING
-	case "WARN3":
-		entry.Severity = ltype.LogSeverity_WARNING
-	case "WARN4":
-		entry.Severity = ltype.LogSeverity_WARNING
-	case "ERROR":
-		entry.Severity = ltype.LogSeverity_ERROR
-	case "ERROR2":
-		entry.Severity = ltype.LogSeverity_ERROR
-	case "ERROR3":
-		entry.Severity = ltype.LogSeverity_ERROR
-	case "ERROR4":
-		entry.Severity = ltype.LogSeverity_ERROR
-	case "FATAL":
-		entry.Severity = ltype.LogSeverity_CRITICAL
-	case "FATAL2":
-		entry.Severity = ltype.LogSeverity_CRITICAL
-	case "FATAL3":
-		entry.Severity = ltype.LogSeverity_CRITICAL
-	case "FATAL4":
-		entry.Severity = ltype.LogSeverity_CRITICAL
-	}
-	return entry
+	return "", false
 }
