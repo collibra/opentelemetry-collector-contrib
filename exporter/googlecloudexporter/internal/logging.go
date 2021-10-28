@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	conventions "go.opentelemetry.io/collector/translator/conventions/v1.5.0"
+	conventions "go.opentelemetry.io/collector/model/semconv/v1.5.0"
 
 	cloudlogging "cloud.google.com/go/logging/apiv2"
 	"go.opentelemetry.io/collector/model/pdata"
@@ -248,7 +248,7 @@ func (gl *GoogleLogging) addBodyToLogEntry(entry *loggingpb.LogEntry, value pdat
 			TextPayload: value.StringVal(),
 		}
 	case pdata.AttributeValueTypeMap:
-		converted := pdata.AttributeMapToMap(value.MapVal())
+		converted := value.MapVal().AsRaw()
 
 		// inject service context for GCP Error reporting
 		if converted[GoogleServiceContext] == nil && len(serviceContext) > 0 {
@@ -267,7 +267,7 @@ func (gl *GoogleLogging) addBodyToLogEntry(entry *loggingpb.LogEntry, value pdat
 	case pdata.AttributeValueTypeDouble:
 	case pdata.AttributeValueTypeBool:
 	case pdata.AttributeValueTypeArray:
-	case pdata.AttributeValueTypeNull:
+	case pdata.AttributeValueTypeEmpty:
 	}
 	return nil
 }

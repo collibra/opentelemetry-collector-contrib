@@ -194,7 +194,7 @@ func TestGoogleLogging_addBodyToLogEntry(t *testing.T) {
 			name: "Empty",
 			args: args{
 				entry:          &loggingpb.LogEntry{},
-				body:           pdata.NewAttributeValueNull(),
+				body:           pdata.NewAttributeValueEmpty(),
 				serviceContext: nil,
 			},
 			want: loggingpb.LogEntry{},
@@ -690,14 +690,14 @@ func newInstrumentationLibraryLogs(name, version string) pdata.InstrumentationLi
 
 func newLogRecord(attr map[string]pdata.AttributeValue) pdata.LogRecord {
 	logRecord := pdata.NewLogRecord()
-	logRecord.SetTimestamp(pdata.TimestampFromTime(time.UnixMilli(0)))
+	logRecord.SetTimestamp(pdata.NewTimestampFromTime(time.UnixMilli(0)))
 	logRecord.Attributes().InitFromMap(attr)
 	return logRecord
 }
 
 func newLogRecordWithBody(attr map[string]pdata.AttributeValue, body pdata.AttributeValue) pdata.LogRecord {
 	logRecord := pdata.NewLogRecord()
-	logRecord.SetTimestamp(pdata.TimestampFromTime(time.UnixMilli(0)))
+	logRecord.SetTimestamp(pdata.NewTimestampFromTime(time.UnixMilli(0)))
 	logRecord.Attributes().InitFromMap(attr)
 	body.CopyTo(logRecord.Body())
 	return logRecord
