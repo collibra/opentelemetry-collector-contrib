@@ -48,7 +48,7 @@ type metricsExporter struct {
 	mexporter *stackdriver.Exporter
 }
 
-// logsExporter experiment
+// logsExporter is a wrapper to a Google Cloud Logging client
 type logsExporter struct {
 	lexporter *internal.GoogleLogging
 }
@@ -60,6 +60,11 @@ func (te *traceExporter) Shutdown(ctx context.Context) error {
 func (me *metricsExporter) Shutdown(context.Context) error {
 	me.mexporter.Flush()
 	me.mexporter.StopMetricsExporter()
+	return nil
+}
+
+func (le *logsExporter) Shutdown(ctx context.Context) error {
+	le.lexporter.Shutdown(ctx)
 	return nil
 }
 
@@ -190,56 +195,15 @@ func newGoogleCloudMetricsExporter(cfg *Config, set component.ExporterCreateSett
 func newGoogleCloudLogsExporter(cfg *Config, params component.ExporterCreateSettings) (component.LogsExporter, error) {
 	setVersionInUserAgent(cfg, params.BuildInfo.Version)
 
-	// TODO:  For each ProjectID, create a different exporter
-	// or at least a unique Google Cloud client per ProjectID.
-	options := stackdriver.Options{
-		// If the project ID is an empty string, it will be set by default based on
-		// the project this is running on in GCP.
-		ProjectID: cfg.ProjectID,
-
-		MetricPrefix: cfg.MetricConfig.Prefix,
-
-		// Set DefaultMonitoringLabels to an empty map to avoid getting the "opencensus_task" label
-		DefaultMonitoringLabels: &stackdriver.Labels{},
-
-		Timeout: cfg.Timeout,
-	}
-
-	// note options.UserAgent overrides the option.WithUserAgent client option in the Metric exporter
-	if cfg.UserAgent != "" {
-		options.UserAgent = cfg.UserAgent
-	}
-
-	copts, err := generateClientOptions(cfg)
-	if err != nil {
-		return nil, err
-	}
-	options.TraceClientOptions = copts
-	options.MonitoringClientOptions = copts
-
-	if cfg.MetricConfig.SkipCreateMetricDescriptor {
-		options.SkipCMD = true
-	}
-	if len(cfg.ResourceMappings) > 0 {
-		rm := resourceMapper{
-			mappings: cfg.ResourceMappings,
-		}
-		options.MapResource = rm.mapResource
-	}
-
-	//sde, serr := stackdriver.NewExporter(options)
-	//if serr != nil {
-	//	return nil, fmt.Errorf("cannot configure Google Cloud metric exporter: %w", serr)
-	//}
-	mExp := &logsExporter{
+	logExp := &logsExporter{
 		lexporter: internal.NewGoogleLogging(context.Background(), cfg.ProjectID),
 	}
 
 	return exporterhelper.NewLogsExporter(
 		cfg,
 		params,
-		mExp.pushLogs,
-		//exporterhelper.WithShutdown(mExp.Shutdown),
+		logExp.pushLogs,
+		exporterhelper.WithShutdown(logExp.Shutdown),
 		// Disable exporterhelper Timeout, since we are using a custom mechanism
 		// within exporter itself
 		exporterhelper.WithTimeout(exporterhelper.TimeoutSettings{Timeout: 0}),
@@ -327,12 +291,13 @@ func numPoints(metrics []*metricspb.Metric) int {
 	}
 	return numPoints
 }
-func (te *logsExporter) pushLogs(ctx context.Context, td pdata.Logs) error {
-	batch := te.lexporter.NewBatch()
-	for i := 0; i < td.ResourceLogs().Len(); i++ {
-		resourceLogs := td.ResourceLogs().At(i)
-		rl := te.lexporter.ToLogEntries(resourceLogs)
-		batch.Append(rl)
+
+func (le *logsExporter) pushLogs(ctx context.Context, logData pdata.Logs) error {
+	batch := le.lexporter.NewBatch()
+	for i := 0; i < logData.ResourceLogs().Len(); i++ {
+		resourceLogs := logData.ResourceLogs().At(i)
+		logEntries := le.lexporter.ToLogEntries(resourceLogs)
+		batch.Append(logEntries)
 	}
 	batch.WriteBatches()
 	return nil
