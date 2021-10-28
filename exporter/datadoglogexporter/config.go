@@ -15,8 +15,15 @@
 package datadoglogexporter
 
 import (
+	"errors"
+
 	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/exporter/exporterhelper"
+)
+
+var (
+	errUnsetURL    = errors.New("URL is not set")
+	errUnsetAPIKey = errors.New("APIKey is not set")
 )
 
 type Config struct {
@@ -25,9 +32,11 @@ type Config struct {
 	exporterhelper.TimeoutSettings `mapstructure:",squash"` // squash ensures fields are correctly decoded in embedded struct.
 	exporterhelper.QueueSettings   `mapstructure:"sending_queue"`
 	exporterhelper.RetrySettings   `mapstructure:"retry_on_failure"`
-	// https://http-intake.logs.datadoghq.com/v1/input
-	Url    string `mapstructure:"url"`
-	Key    string `mapstructure:"key"`
+
+	// https://docs.datadoghq.com/api/latest/logs/#send-logs
+	URL string `mapstructure:"url"`
+	// https://docs.datadoghq.com/account_management/api-app-keys/
+	APIKey string `mapstructure:"api_key"`
 	Source string `mapstructure:"source"`
 
 	TagOperations   []Tag   `mapstructure:"tag_operations"`
@@ -35,6 +44,16 @@ type Config struct {
 
 	ServiceDetect []DetectOperation `mapstructure:"service_detect"`
 	SourceDetect  []DetectOperation `mapstructure:"source_detect"`
+}
+
+func (config Config) Validate() error {
+	if config.URL == "" {
+		return errUnsetURL
+	}
+	if config.APIKey == "" {
+		return errUnsetAPIKey
+	}
+	return nil
 }
 
 type Tag struct {

@@ -18,347 +18,306 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"strings"
-	"sync"
-	"time"
 
+	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadoglogexporter/internal/client"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/consumer"
 	"go.opentelemetry.io/collector/model/pdata"
+	semconv "go.opentelemetry.io/collector/model/semconv/v1.6.1"
 	"go.uber.org/zap"
 )
 
-const name = "googlecloudpubsub"
+const (
+	// https://docs.datadoghq.com/api/latest/logs/#send-logs
+	MaxBatchMessages int = 1000
+	MaxBatchSize     int = 5 * 1000 * 1000 // 5 MB
 
-// pubsubExporter is a wrapper struct of OT cloud trace exporter
-type pubsubExporter struct {
-	instanceName string
-	logger       *zap.Logger
+	// https://docs.datadoghq.com/logs/log_configuration/attributes_naming_convention/#reserved-attributes
+	MessageAttributeMessage   string = "message"
+	MessageAttributeSpanID    string = "span_id"
+	MessageAttributeStatus    string = "status"
+	MessageAttributeTimestamp string = "timestamp"
+	MessageAttributeTraceID   string = "trace_id"
 
-	client *http.Client
+	// OpenTelemetry convention extensions
+	AttributeHost        string = "host"
+	AttributeLogName     string = "log.name"
+	AttributeServiceType string = "service.type"
+)
 
-	cancel context.CancelFunc
-	wg     sync.WaitGroup
+// https://github.com/DataDog/datadog-api-client-go/blob/v1.5.0/api/v1/datadog/model_http_log_item.go#L16
+type datadogMessage struct {
+	Source   string      `json:"ddsource,omitempty"`
+	Tags     string      `json:"ddtags,omitempty"`
+	Hostname string      `json:"hostname,omitempty"`
+	Message  interface{} `json:"message,omitempty"`
+	Service  string      `json:"service,omitempty"`
+}
 
-	//
-	userAgent string
+func (m *datadogMessage) Marshal() ([]byte, error) {
+	return json.Marshal(m)
+}
+
+// datadogExporterBatch collects messages in batches and send those using the datadogExporter
+type datadogExporterBatch struct {
+	logger   *zap.Logger
+	exporter *datadogExporter
+	buffer   *bytes.Buffer
+	count    int
+
+	maxBatchSize     int
+	maxBatchMessages int
+}
+
+// Append a datadog message to the batch. This method will automatically call WriteBatch once the batch
+// reaches one of those limits:
+// - batch payload size of MaxBatchSize
+// - batch message count of MaxBatchMessages
+func (b *datadogExporterBatch) Append(message *datadogMessage) {
+	rawMessage, err := message.Marshal()
+	if err != nil {
+		b.logger.Warn("failed to marshal datadog message", zap.Error(err))
+	}
+
+	// Batch is full, write it (buffer size + message size + ',' + ']')
+	if b.buffer.Len()+len(rawMessage)+2 > b.maxBatchSize {
+		b.logger.Debug("Reached max batch size, writing batch", zap.Int("max_batch_size", b.maxBatchSize), zap.Int("batch_size", b.buffer.Len()))
+		b.WriteBatch()
+	} else if b.count >= b.maxBatchMessages {
+		b.logger.Debug("Reached max messages per batch, writing batch", zap.Int("max_batch_messages", b.maxBatchMessages), zap.Int("batch_messages", b.count))
+		b.WriteBatch()
+	}
+
+	b.appendToBatch(rawMessage)
+}
+
+func (b *datadogExporterBatch) appendToBatch(message []byte) {
+	if len(message) == 0 {
+		return
+	}
+	if b.buffer.Len() == 0 {
+		b.buffer.WriteByte('[')
+	} else {
+		b.buffer.WriteByte(',')
+	}
+	b.buffer.Write(message)
+	b.count++
+}
+
+// WriteBatch write the batch using the datadogExporter.
+// This is a noop if no messages have been appended.
+func (b *datadogExporterBatch) WriteBatch() error {
+	if b.buffer.Len() == 0 {
+		return nil
+	}
+	b.buffer.WriteByte(']')
+	err := b.exporter.send(b.buffer)
+	b.buffer.Reset()
+	b.count = 0
+	return err
+}
+
+// datadogExporter is a wrapper around the DataDog Log Intake API
+type datadogExporter struct {
+	logger    *zap.Logger
+	buildInfo component.BuildInfo
 	config    *Config
-	//
+
+	client *client.DatadogClient
 }
 
-func (*pubsubExporter) Name() string {
-	return name
+func (*datadogExporter) Name() string {
+	return typeStr
 }
 
-type Encoding int
-
-func (ex *pubsubExporter) Start(ctx context.Context, _ component.Host) error {
-	//
-	tr := &http.Transport{
-		MaxIdleConns:       10,
-		IdleConnTimeout:    30 * time.Second,
-		DisableCompression: false,
-	}
-	ex.client = &http.Client{Transport: tr}
-
-	return nil
-}
-
-func (ex *pubsubExporter) Shutdown(context.Context) error {
-	if ex.client != nil {
-		ex.client.CloseIdleConnections()
-		ex.client = nil
-	}
-	return nil
-}
-
-func (ex *pubsubExporter) Capabilities() consumer.Capabilities {
+func (ex *datadogExporter) Capabilities() consumer.Capabilities {
 	return consumer.Capabilities{
 		MutatesData: false,
 	}
 }
 
-type DataDogMessage struct {
-	DDSource  string      `json:"ddsource"`
-	DDService string      `json:"ddservice"`
-	DDTags    string      `json:"ddtags"`
-	Message   interface{} `json:"message"`
+func (ex *datadogExporter) Start(context.Context, component.Host) error {
+	userAgent := fmt.Sprintf("%s/%s", ex.buildInfo.Command, ex.buildInfo.Version)
+	ex.client = client.NewClient(ex.config.APIKey, userAgent)
+	return nil
 }
 
-func (ex *pubsubExporter) treeWalker(attrMap pdata.AttributeMap) map[string]interface{} {
-	out := map[string]interface{}{}
-
-	attrMap.Range(func(key string, value pdata.AttributeValue) bool {
-		switch value.Type() {
-		case pdata.AttributeValueTypeMap:
-			out[key] = ex.treeWalker(value.MapVal())
-		case pdata.AttributeValueTypeString:
-			out[key] = value.StringVal()
-		case pdata.AttributeValueTypeBool:
-			out[key] = value.BoolVal()
-		case pdata.AttributeValueTypeDouble:
-			out[key] = value.DoubleVal()
-		case pdata.AttributeValueTypeInt:
-			out[key] = value.IntVal()
-		}
-		return true
-	})
-	return out
-}
-
-func (ex *pubsubExporter) logToJson(record pdata.LogRecord) map[string]interface{} {
-	body := record.Body()
-	return ex.treeWalker(body.MapVal())
-}
-
-func (ex *pubsubExporter) marshalMap(resourceLogs pdata.ResourceLogs, instrLogs pdata.InstrumentationLibraryLogs, record pdata.LogRecord) ([]byte, error) {
-	out := ex.logToJson(record)
-	ex.handleConventions(resourceLogs, instrLogs, record, out)
-	return json.Marshal(out)
-}
-
-func (ex *pubsubExporter) handleConventions(resourceLogs pdata.ResourceLogs, instrLogs pdata.InstrumentationLibraryLogs, record pdata.LogRecord, out map[string]interface{}) {
-	ex.addTimestamp(record, out)
-	ex.addSeverity(record, out)
-	ex.addLabels(resourceLogs, instrLogs, record, out)
-	ex.addTraceInfo(record, out)
-	ex.labelOperations(out)
-	ex.normalize(out)
-	ex.reservedAttributes(out)
-	ex.tags(out)
-}
-
-func (ex *pubsubExporter) marshal(resourceLogs pdata.ResourceLogs, instrLogs pdata.InstrumentationLibraryLogs, record pdata.LogRecord) []byte {
-	var marshal []byte
-	switch record.Body().Type() {
-	case pdata.AttributeValueTypeMap:
-		marshal, _ = ex.marshalMap(resourceLogs, instrLogs, record)
-	case pdata.AttributeValueTypeString:
-		marshal, _ = ex.marshalText(resourceLogs, instrLogs, record)
-	}
-	return marshal
-}
-
-func (ex *pubsubExporter) marshalText(resourceLogs pdata.ResourceLogs, instrLogs pdata.InstrumentationLibraryLogs, record pdata.LogRecord) ([]byte, error) {
-	message := record.Body().StringVal()
-
-	var out map[string]interface{}
-	err := json.Unmarshal([]byte(message), &out)
-	if err != nil {
-		out = map[string]interface{}{
-			"message": message,
-		}
-	}
-
-	ex.handleConventions(resourceLogs, instrLogs, record, out)
-	return json.Marshal(out)
-}
-
-func (ex *pubsubExporter) addToBuffer(resourceLogs pdata.ResourceLogs, instrLogs pdata.InstrumentationLibraryLogs, record pdata.LogRecord, buffer *bytes.Buffer) error {
-	if buffer.Len() == 0 {
-		buffer.WriteByte('[')
-	} else {
-		buffer.WriteByte(',')
-	}
-	buffer.Write(ex.marshal(resourceLogs, instrLogs, record))
-
-	if buffer.Len() > 4000000 {
-		return ex.finishBuffer(buffer)
+func (ex *datadogExporter) Shutdown(context.Context) error {
+	if ex.client != nil {
+		ex.client.Close()
+		ex.client = nil
 	}
 	return nil
 }
 
-func (ex *pubsubExporter) finishBuffer(buffer *bytes.Buffer) error {
-	if buffer.Len() == 0 {
-		return nil
-	}
-	buffer.WriteByte(']')
+func (ex *datadogExporter) ConsumeLogs(_ context.Context, logs pdata.Logs) error {
+	batch := ex.newBatch()
 
-	request, _ := http.NewRequest("POST", ex.config.Url, buffer)
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("DD-API-KEY", ex.config.Key)
-	//request.Header.Add("DD_APP_KEY", ex.config.Key)
-
-	response, err := ex.client.Do(request)
-	buffer.Reset()
-	if err != nil {
-		return err
-	}
-	if response.StatusCode != 200 {
-		return errors.New("status is not 200")
-	}
-	return nil
-}
-
-func (ex *pubsubExporter) ConsumeLogs(ctx context.Context, td pdata.Logs) error {
-
-	buffer := bytes.NewBuffer([]byte{})
-
-	for i := 0; i < td.ResourceLogs().Len(); i++ {
-		resourceLogs := td.ResourceLogs().At(i)
+	for i := 0; i < logs.ResourceLogs().Len(); i++ {
+		resourceLogs := logs.ResourceLogs().At(i)
 		instrumentationLibraryLogs := resourceLogs.InstrumentationLibraryLogs()
 		for ii := 0; ii < instrumentationLibraryLogs.Len(); ii++ {
 			logs := instrumentationLibraryLogs.At(ii)
 			instrumentationLibraryLog := logs.Logs()
 			for li := 0; li < instrumentationLibraryLog.Len(); li++ {
-				err := ex.addToBuffer(resourceLogs, logs, instrumentationLibraryLog.At(li), buffer)
-				if err != nil {
-					return err
+				msg := ex.toMessage(resourceLogs, logs, instrumentationLibraryLog.At(li))
+				if msg != nil {
+					batch.Append(msg)
 				}
 			}
 		}
 	}
-	return ex.finishBuffer(buffer)
+
+	return batch.WriteBatch()
 }
 
-func (ex *pubsubExporter) addLabels(logs pdata.ResourceLogs, il pdata.InstrumentationLibraryLogs, logRecord pdata.LogRecord, out map[string]interface{}) {
-	logRecord.Attributes().Range(func(k string, v pdata.AttributeValue) bool {
-		out[k] = v.StringVal()
-		return true
-	})
-	logs.Resource().Attributes().Range(func(k string, v pdata.AttributeValue) bool {
-		out[k] = v.StringVal()
-		return true
-	})
-	if il.InstrumentationLibrary().Name() != "" {
-		out["instrumentation.name"] = il.InstrumentationLibrary().Name()
-	}
-	if il.InstrumentationLibrary().Version() != "" {
-		out["instrumentation.version"] = il.InstrumentationLibrary().Version()
+func (ex *datadogExporter) newBatch() *datadogExporterBatch {
+	return &datadogExporterBatch{
+		logger:           ex.logger.Named("batch"),
+		exporter:         ex,
+		buffer:           bytes.NewBuffer([]byte{}),
+		count:            0,
+		maxBatchSize:     MaxBatchSize,
+		maxBatchMessages: MaxBatchMessages,
 	}
 }
 
-func (ex *pubsubExporter) addSeverity(logRecord pdata.LogRecord, out map[string]interface{}) {
-	if out["status"] == nil {
-		out["status"] = logRecord.SeverityText()
+func (ex *datadogExporter) send(buffer *bytes.Buffer) error {
+	request, err := http.NewRequest("POST", ex.config.URL, buffer)
+	if err != nil {
+		return err
+	}
+
+	request.Header.Set(client.HeaderContentType, client.ContentTypeApplicationJSON)
+
+	response, err := ex.client.Do(request)
+	if err != nil {
+		return err
+	}
+	if response.StatusCode != 200 {
+		return fmt.Errorf("send failed with status code %v", response.StatusCode)
+	}
+	return nil
+}
+
+func (ex *datadogExporter) toMessage(resourceLogs pdata.ResourceLogs, instrLogs pdata.InstrumentationLibraryLogs, record pdata.LogRecord) *datadogMessage {
+	var messageMap map[string]interface{}
+	switch record.Body().Type() {
+	case pdata.AttributeValueTypeMap:
+		messageMap = record.Body().MapVal().AsRaw()
+	case pdata.AttributeValueTypeString:
+		messageMap = ex.getMessageMapFromText(record.Body().StringVal())
+	}
+	if messageMap != nil {
+		return ex.buildMessage(resourceLogs, instrLogs, record, messageMap)
+	}
+	return nil
+}
+
+func (ex *datadogExporter) getMessageMapFromText(messageText string) map[string]interface{} {
+	var messageMap map[string]interface{}
+	err := json.Unmarshal([]byte(messageText), &messageMap)
+	if err != nil {
+		ex.logger.Debug("Failed to parse string message as JSON", zap.Error(err))
+		messageMap = map[string]interface{}{MessageAttributeMessage: messageText}
+	}
+	return messageMap
+}
+
+func (ex *datadogExporter) buildMessage(resourceLogs pdata.ResourceLogs, instrLogs pdata.InstrumentationLibraryLogs, record pdata.LogRecord, messageMap map[string]interface{}) *datadogMessage {
+	labels := extractLabels(resourceLogs, instrLogs, record)
+	ex.completeMessage(messageMap, record)
+	return &datadogMessage{
+		Hostname: ex.getHostname(labels),
+		Service:  ex.getService(labels),
+		Source:   ex.getSource(labels),
+		Tags:     ex.getTags(labels),
+		Message:  messageMap,
 	}
 }
 
-func (ex *pubsubExporter) addTimestamp(logRecord pdata.LogRecord, out map[string]interface{}) {
-	if out["timestamp"] == nil {
-		out["timestamp"] = logRecord.Timestamp().AsTime().Format("2006-01-02T15:04:05.000Z0700")
+func (ex *datadogExporter) getHostname(labels map[string]string) string {
+	if hostname, found := getFirstNotEmptyLabel(labels, []string{semconv.AttributeHostName, AttributeHost}); found {
+		return hostname
 	}
+	return ""
 }
 
-func (ex *pubsubExporter) addTraceInfo(logRecord pdata.LogRecord, out map[string]interface{}) {
-	if !logRecord.TraceID().IsEmpty() {
-		out["trace_id"] = logRecord.TraceID().HexString()
+func (ex *datadogExporter) getSource(labels map[string]string) string {
+	if source, found := getFirstNotEmptyLabel(labels, []string{AttributeServiceType, semconv.AttributeServiceName, AttributeLogName}); found {
+		return source
 	}
-	if !logRecord.SpanID().IsEmpty() {
-		out["span_id"] = logRecord.SpanID().HexString()
-	}
+	return ""
 }
 
-func (ex *pubsubExporter) tags(out map[string]interface{}) {
+func (ex *datadogExporter) getService(labels map[string]string) string {
+	if service, found := getFirstNotEmptyLabel(labels, []string{semconv.AttributeServiceName, AttributeLogName, semconv.AttributeK8SContainerName, semconv.AttributeK8SPodName}); found {
+		return service
+	}
+	return ""
+}
+
+func (ex *datadogExporter) getTags(labels map[string]string) string {
 	var tags []string
-
-	for _, tagOperation := range ex.config.TagOperations {
-		value := out[tagOperation.From]
-		if value != nil {
-			tags = append(tags, fmt.Sprintf("%s:%s", tagOperation.To, value))
+	for key, value := range labels {
+		if value != "" {
+			tags = append(tags, fmt.Sprintf("%s:%s", key, value))
+		} else {
+			tags = append(tags, key)
 		}
 	}
 	if len(tags) == 0 {
-		return
+		return ""
 	}
-	out["ddtags"] = fmt.Sprintf(strings.Join(tags, ","))
+	return strings.Join(tags, ",")
 }
 
-func (ex *pubsubExporter) labelOperations(out map[string]interface{}) {
-	for _, labelOperation := range ex.config.LabelOperations {
-		switch labelOperation.Operation {
-		case "move":
-			move(out, labelOperation.From, labelOperation.To)
-		case "copy":
-			copy(out, labelOperation.From, labelOperation.To)
-		default:
+func (ex *datadogExporter) completeMessage(messageMap map[string]interface{}, record pdata.LogRecord) {
+	if messageMap[MessageAttributeTimestamp] == nil {
+		messageMap[MessageAttributeTimestamp] = record.Timestamp().AsTime().Format("2006-01-02T15:04:05.000Z0700")
+	}
+	if messageMap[MessageAttributeStatus] == nil && record.SeverityText() != "" {
+		messageMap[MessageAttributeStatus] = record.SeverityText()
+	}
+	if !record.TraceID().IsEmpty() {
+		messageMap[MessageAttributeTraceID] = record.TraceID().HexString()
+	}
+	if !record.SpanID().IsEmpty() {
+		messageMap[MessageAttributeSpanID] = record.SpanID().HexString()
+	}
+}
+
+func extractLabels(logs pdata.ResourceLogs, il pdata.InstrumentationLibraryLogs, logRecord pdata.LogRecord) map[string]string {
+	labels := map[string]string{}
+	logs.Resource().Attributes().Range(func(k string, v pdata.AttributeValue) bool {
+		labels[k] = v.StringVal()
+		return true
+	})
+	// Priority to attributes
+	logRecord.Attributes().Range(func(k string, v pdata.AttributeValue) bool {
+		labels[k] = v.StringVal()
+		return true
+	})
+	if il.InstrumentationLibrary().Name() != "" {
+		labels["opentelemetry.org/instrumentation/name"] = il.InstrumentationLibrary().Name()
+	}
+	if il.InstrumentationLibrary().Version() != "" {
+		labels["opentelemetry.org/instrumentation/version"] = il.InstrumentationLibrary().Version()
+	}
+	return labels
+}
+
+// getFirstNotEmptyLabel finds the first not empty label in the provided labels from the list of keys
+// returns the value and a bool to know if a not empty value has been found
+func getFirstNotEmptyLabel(labels map[string]string, keys []string) (string, bool) {
+	for i := range keys {
+		key := keys[i]
+		if value, found := labels[key]; found && value != "" {
+			return value, true
 		}
 	}
-}
-
-//func (ex *pubsubExporter) serviceDetect(out map[string]interface{}) {
-//	for _, serviceDetect := range ex.config.ServiceDetect {
-//		if out[serviceDetect.Field] == serviceDetect.Equals {
-//			out["service"] = serviceDetect.Name
-//			return
-//		}
-//	}
-//}
-//
-
-func (ex *pubsubExporter) reservedAttributes(out map[string]interface{}) {
-	ex.detectionRules(out, ex.config.ServiceDetect, "service")
-	ex.detectionRules(out, ex.config.SourceDetect, "ddsource")
-}
-func (ex *pubsubExporter) detectionRules(out map[string]interface{}, operations []DetectOperation, name string) {
-	if out[name] != nil {
-		return
-	}
-
-	for _, operation := range operations {
-		if operation.Operation == "default" {
-			out[name] = operation.Name
-			return
-		}
-		value := out[operation.Field]
-		if len(operation.Equals) > 0 {
-			if operation.Equals == value {
-				switch operation.Operation {
-				case "replace":
-					delete(out, operation.Field)
-					out[name] = operation.Name
-					return
-				case "copy":
-					out[name] = operation.Name
-					return
-				}
-			}
-		} else if value != nil {
-			switch operation.Operation {
-			case "replace":
-				sv, ok := value.(string)
-				if ok {
-					delete(out, operation.Field)
-					out[name] = sv
-					return
-				}
-			case "copy":
-				sv, ok := value.(string)
-				if ok {
-					out[name] = sv
-					return
-				}
-			}
-		}
-	}
-}
-
-func move(out map[string]interface{}, from string, to string) {
-	if out[to] != nil {
-		return
-	}
-	copy(out, from, to)
-	delete(out, from)
-}
-
-func copy(out map[string]interface{}, from string, to string) {
-	if out[to] != nil {
-		return
-	}
-	value := out[from]
-	if value != nil {
-		out[to] = value
-	}
-}
-
-// https://docs.datadoghq.com/logs/processing/attributes_naming_convention/#reserved-attributes
-func (ex *pubsubExporter) normalize(out map[string]interface{}) {
-	move(out, "logger_name", "logger.name")
-	move(out, "thread_name", "logger.thread_name")
-	move(out, "service.name", "service")
-	move(out, "service.version", "version")
-	copy(out, "host.name", "hostname")
+	return "", false
 }

@@ -50,11 +50,14 @@ func createLogsExporter(
 	cfg config.Exporter) (component.LogsExporter, error) {
 
 	pCfg := cfg.(*Config)
+	if err := pCfg.Validate(); err != nil {
+		return nil, err
+	}
 
-	exporter := &pubsubExporter{
-		instanceName: pCfg.ID().Name(),
-		logger:       params.Logger,
-		config:       pCfg,
+	exporter := &datadogExporter{
+		logger:    params.Logger,
+		buildInfo: params.BuildInfo,
+		config:    pCfg,
 	}
 
 	return exporterhelper.NewLogsExporter(
