@@ -15,6 +15,7 @@
 package components
 
 import (
+	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudpubsubexporter"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/service/defaultcomponents"
 
@@ -237,6 +238,7 @@ func Components() (component.Factories, error) {
 		sumologicexporter.NewFactory(),
 		tanzuobservabilityexporter.NewFactory(),
 		zipkinexporter.NewFactory(),
+		googlecloudpubsubexporter.NewFactory(),
 	}
 	for _, exp := range factories.Exporters {
 		exporters = append(exporters, exp)

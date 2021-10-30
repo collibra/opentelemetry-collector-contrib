@@ -1569,8 +1569,6 @@ github.com/onsi/gomega v1.10.4/go.mod h1:g/HbgYopi++010VEqkFgJHKC09uJiW9UkXvMUuK
 github.com/onsi/gomega v1.16.0 h1:6gjqkI8iiRHMvdccRJM8rVKjCWk6ZIm6FTm3ddIe4/c=
 github.com/onsi/gomega v1.16.0/go.mod h1:HnhC7FXeEQY45zxNK3PPoIUhzk/80Xly9PcubAlGdZY=
 github.com/op/go-logging v0.0.0-20160315200505-970db520ece7/go.mod h1:HzydrMdWErDVzsI23lYNej1Htcns9BCg93Dk0bBINWk=
-github.com/open-telemetry/opentelemetry-collector-contrib/receiver/googlecloudpubsubreceiver v0.38.0 h1:cMAV2ASUobhz9LAC8gUG3SKRqgQDtBdM8BWI2fwgmXo=
-github.com/open-telemetry/opentelemetry-collector-contrib/receiver/googlecloudpubsubreceiver v0.38.0/go.mod h1:+trw1dzRPBfjjz4AJ0OzLdw/EYlnWsHjRFlLtpODSEc=
 github.com/open-telemetry/opentelemetry-log-collection v0.22.0 h1:GrzrnzzuXZLkshHwOqHroKRpS99vWWd8U34g+TJyNFY=
 github.com/open-telemetry/opentelemetry-log-collection v0.22.0/go.mod h1:Dvdoz+3RMM6TC8fIZaKAAhhhZVwCf7FyMG05ufhh5Bw=
 github.com/opencontainers/go-digest v0.0.0-20170106003457-a6d0ee40d420/go.mod h1:cMLVZDEM3+U2I4VmLI6N8jQYUd2OVphdqWwCJHrFt2s=
