@@ -11,11 +11,13 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/azuremonitorexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/carbonexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadogexporter v0.38.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadoglogexporter v0.0.0-00010101000000-000000000000
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/dynatraceexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/elasticexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/f5cloudexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudexporter v0.38.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudpubsubexporter v0.0.0-00010101000000-000000000000
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/honeycombexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/humioexporter v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/influxdbexporter v0.38.0
@@ -73,6 +75,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/dotnetdiagnosticsreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/filelogreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/fluentforwardreceiver v0.38.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/googlecloudpubsubreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/googlecloudspannerreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/hostmetricsreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/influxdbreceiver v0.38.0
@@ -83,6 +86,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/kafkametricsreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/kafkareceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/kubeletstatsreceiver v0.38.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/mongodbatlasreceiver v0.0.0-00010101000000-000000000000
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/opencensusreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/podmanreceiver v0.38.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusexecreceiver v0.38.0
@@ -107,12 +111,11 @@ require (
 	golang.org/x/sys v0.0.0-20211007075335-d3039528d8ac
 )
 
-require github.com/open-telemetry/opentelemetry-collector-contrib/receiver/mongodbatlasreceiver v0.38.0
-
 require (
 	cloud.google.com/go v0.97.0 // indirect
 	cloud.google.com/go/logging v1.4.2 // indirect
 	cloud.google.com/go/monitoring v0.1.0 // indirect
+	cloud.google.com/go/pubsub v1.17.1 // indirect
 	cloud.google.com/go/spanner v1.27.0 // indirect
 	cloud.google.com/go/trace v0.1.0 // indirect
 	code.cloudfoundry.org/clock v1.0.0 // indirect
@@ -459,8 +462,6 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/carbo
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadogexporter => ./exporter/datadogexporter
 
-replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadoglogexporter => ./exporter/datadoglogexporter
-
 replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/dynatraceexporter => ./exporter/dynatraceexporter
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/f5cloudexporter => ./exporter/f5cloudexporter
@@ -663,5 +664,11 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/stack
 
 // see https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/4433
 exclude github.com/StackExchange/wmi v1.2.0
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/googlecloudpubsubexporter => ./receiver/googlecloudpubsubexporter
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/googlecloudpubsubexporter => ./exporter/googlecloudpubsubexporter
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadoglogexporter => ./exporter/datadoglogexporter
 
 retract v0.37.0 // Contains dependencies on v0.36.0 components, which should have been updated to v0.37.0.
