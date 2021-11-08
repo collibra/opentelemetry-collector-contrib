@@ -227,8 +227,9 @@ github.com/hashicorp/yamux v0.0.0-20181012175058-2f1d1f20f75d/go.mod h1:+NfK9FKe
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
-github.com/influxdata/influxdb-observability/common v0.2.7 h1:C+oDh8Kbw+Ykx9yog/uJXL27rwMN3hgTLQfAFg1eQO0=
 github.com/influxdata/influxdb-observability/common v0.2.7/go.mod h1:+8VMGrfWZnXjc1c/oP+N4O/sHoneWgN3ojAHwgYgV4A=
+github.com/influxdata/influxdb-observability/common v0.2.9 h1:RUznJ3xeRspbLJmOed+ajWtKOGWl5Ypxw0/hXz28qwA=
+github.com/influxdata/influxdb-observability/common v0.2.9/go.mod h1:IaCJfkwuLpkCltbCapIsZGljtASX4xs/tMz4+ivjNQo=
 github.com/influxdata/influxdb-observability/otel2influx v0.0.0-20210927215436-943f6419116a h1:YUrcmqUgG8ZLenYQEcwEniVZIHRcxU9PLH7WSQDzWGA=
 github.com/influxdata/influxdb-observability/otel2influx v0.0.0-20210927215436-943f6419116a/go.mod h1:vk9y2BdPA6ifcQO+8Qfp0r21wVXHtRLdoiMLytW0cZk=
 github.com/influxdata/line-protocol-corpus v0.0.0-20210519164801-ca6fa5da0184 h1:modYba1g1we+YJf0yGTwmohVWVAxcAch18nPg3e24OY=
@@ -395,8 +396,8 @@ go.opentelemetry.io/collector v0.37.1-0.20211015233822-bd87fb628058/go.mod h1:zb
 go.opentelemetry.io/collector/model v0.35.0/go.mod h1:+7YCSjJG+MqiIFjauzt7oM2qkqBsaJWh5hcsO4fwsAc=
 go.opentelemetry.io/collector/model v0.36.1-0.20210927193005-ebb0fbd6f23e/go.mod h1:ESh1oWDNdS4fTg9sTFoYuiuvs8QuaX8yNGTPix3JZc8=
 go.opentelemetry.io/collector/model v0.37.0/go.mod h1:ESh1oWDNdS4fTg9sTFoYuiuvs8QuaX8yNGTPix3JZc8=
-go.opentelemetry.io/collector/model v0.37.1-0.20211015233822-bd87fb628058 h1:jDw0pFIkDbvNRkkdCz1+gsBXIKbtY3GtRMPqzBeOfs4=
-go.opentelemetry.io/collector/model v0.37.1-0.20211015233822-bd87fb628058/go.mod h1:ESh1oWDNdS4fTg9sTFoYuiuvs8QuaX8yNGTPix3JZc8=
+go.opentelemetry.io/collector/model v0.38.1-0.20211103215828-cffbecb2ac9e h1:rpq7atXk3Jg4bP7VuJ2xq3rqW1NIz7GObcZSwSSATpo=
+go.opentelemetry.io/collector/model v0.38.1-0.20211103215828-cffbecb2ac9e/go.mod h1:gS8A27wi+8gM3hrXL+dEjTbrbLxktjHjAwwqI31ELgQ=
 go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.25.0/go.mod h1:E5NNboN0UqSAki0Atn9kVwaN7I+l25gGxDqBueo/74E=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.25.0 h1:FIbb8m2PtTWjvXLHOEnXAoSmkaiXbg3fuvoZAjsAT3Q=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.25.0/go.mod h1:NyB05cd+yPX6W5SiRNuJ90w7PV2+g2cgRbsPL7MvpME=
