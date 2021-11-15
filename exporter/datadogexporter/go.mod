@@ -19,7 +19,7 @@ require (
 	go.opentelemetry.io/collector v0.37.1-0.20211015233822-bd87fb628058
 	go.opentelemetry.io/collector/model v0.37.1-0.20211015233822-bd87fb628058
 	go.uber.org/zap v1.19.1
-	gopkg.in/DataDog/dd-trace-go.v1 v1.33.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.34.0
 	gopkg.in/zorkian/go-datadog-api.v2 v2.30.0
 )
 
