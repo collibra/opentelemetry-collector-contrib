@@ -54,6 +54,8 @@ func createLogsExporter(
 		return nil, err
 	}
 
+	pCfg.InitDefaults()
+
 	exporter := &datadogExporter{
 		logger:    params.Logger,
 		buildInfo: params.BuildInfo,

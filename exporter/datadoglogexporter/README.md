@@ -13,7 +13,7 @@ The only required settings are:
 ```yaml
 datadoglog:
   url: "https://http-intake.logs.datadoghq.com/v1/input"
-  apiKey: "${DATADOG_APIKEY}"
+  api_key: "${DATADOG_APIKEY}"
 ```
 
-In this example, the `apiKey` is injected using [environment variables](https://opentelemetry.io/docs/collector/configuration/#configuration-environment-variables).
+In this example, the `api_key` is injected using [environment variables](https://opentelemetry.io/docs/collector/configuration/#configuration-environment-variables).

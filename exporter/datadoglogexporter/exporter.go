@@ -20,13 +20,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadoglogexporter/internal/client"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/consumer"
 	"go.opentelemetry.io/collector/model/pdata"
-	semconv "go.opentelemetry.io/collector/model/semconv/v1.6.1"
 	"go.uber.org/zap"
 )
 
@@ -41,11 +41,6 @@ const (
 	MessageAttributeStatus    string = "status"
 	MessageAttributeTimestamp string = "timestamp"
 	MessageAttributeTraceID   string = "trace_id"
-
-	// OpenTelemetry convention extensions
-	AttributeHost        string = "host"
-	AttributeLogName     string = "log.name"
-	AttributeServiceType string = "service.type"
 )
 
 // https://github.com/DataDog/datadog-api-client-go/blob/v1.5.0/api/v1/datadog/model_http_log_item.go#L16
@@ -240,22 +235,33 @@ func (ex *datadogExporter) buildMessage(resourceLogs pdata.ResourceLogs, instrLo
 }
 
 func (ex *datadogExporter) getHostname(labels map[string]string) string {
-	if hostname, found := getFirstNotEmptyLabel(labels, []string{semconv.AttributeHostName, AttributeHost}); found {
+	if hostname, found := getFirstNotEmptyLabel(labels, ex.config.HostnameFrom); found {
 		return hostname
 	}
 	return ""
 }
 
 func (ex *datadogExporter) getSource(labels map[string]string) string {
-	if source, found := getFirstNotEmptyLabel(labels, []string{AttributeServiceType, semconv.AttributeServiceName, AttributeLogName}); found {
+	if source, found := getFirstNotEmptyLabel(labels, ex.config.SourceFrom); found {
 		return source
 	}
-	return ""
+	return ex.getLogNameFromFileName(labels)
 }
 
 func (ex *datadogExporter) getService(labels map[string]string) string {
-	if service, found := getFirstNotEmptyLabel(labels, []string{semconv.AttributeServiceName, AttributeLogName, semconv.AttributeK8SContainerName, semconv.AttributeK8SPodName}); found {
+	if service, found := getFirstNotEmptyLabel(labels, ex.config.ServiceNameFrom); found {
 		return service
+	}
+	return ex.getLogNameFromFileName(labels)
+}
+
+func (ex *datadogExporter) getLogNameFromFileName(labels map[string]string) string {
+	if fileName, found := getFirstNotEmptyLabel(labels, ex.config.FileNameFrom); found {
+		logName := strings.TrimSuffix(fileName, filepath.Ext(fileName))
+		if idx := strings.Index(fileName, "-"); idx >= 0 {
+			logName = logName[:idx]
+		}
+		return logName
 	}
 	return ""
 }

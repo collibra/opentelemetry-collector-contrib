@@ -43,7 +43,7 @@ func TestDatadogExporterBatch_WriteBatch_OneMessage(t *testing.T) {
 		data, err := ioutil.ReadAll(req.Body)
 		defer req.Body.Close()
 		assert.NoError(t, err)
-		assert.JSONEq(t, `[{"service":"service","message":{"a":"b"}}]`, string(data))
+		assert.JSONEq(t, `[{"hostname":"host","ddsource":"source","ddtags":"tag", "service":"service","message":{"a":"b"}}]`, string(data))
 
 		w.WriteHeader(http.StatusOK)
 	}))
@@ -52,8 +52,11 @@ func TestDatadogExporterBatch_WriteBatch_OneMessage(t *testing.T) {
 	b := exp.newBatch()
 
 	b.Append(&datadogMessage{
-		Service: "service",
-		Message: map[string]interface{}{"a": "b"},
+		Hostname: "host",
+		Source:   "source",
+		Service:  "service",
+		Tags:     "tag",
+		Message:  map[string]interface{}{"a": "b"},
 	})
 	assert.Greater(t, b.buffer.Len(), 0)
 	require.Equal(t, 1, b.count)
@@ -315,6 +318,11 @@ func Test_datadogExporter_getService(t *testing.T) {
 			labels: map[string]string{"k8s.pod.name": "pod"},
 			want:   "pod",
 		},
+		{
+			name:   "File name",
+			labels: map[string]string{"file.name": "file.log"},
+			want:   "file",
+		},
 	}
 	exp := newTestDatadogExporter(t)
 	for _, tt := range tests {
@@ -351,11 +359,47 @@ func Test_datadogExporter_getSource(t *testing.T) {
 			labels: map[string]string{"log.name": "log"},
 			want:   "log",
 		},
+		{
+			name:   "File name",
+			labels: map[string]string{"file.name": "file.log"},
+			want:   "file",
+		},
 	}
 	exp := newTestDatadogExporter(t)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := exp.getSource(tt.labels)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_datadogExporter_getLogNameFromFileName(t *testing.T) {
+	tests := []struct {
+		name   string
+		labels map[string]string
+		want   string
+	}{
+		{
+			name:   "Empty",
+			labels: nil,
+			want:   "",
+		},
+		{
+			name:   "File name",
+			labels: map[string]string{"file.name": "name.log"},
+			want:   "name",
+		},
+		{
+			name:   "File name with date",
+			labels: map[string]string{"file_name": "log-yyyy-mm-dd.log"},
+			want:   "log",
+		},
+	}
+	exp := newTestDatadogExporter(t)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := exp.getLogNameFromFileName(tt.labels)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -678,10 +722,12 @@ func Test_getFirstNotEmptyLabel(t *testing.T) {
 // helpers
 
 func newTestDatadogExporter(t *testing.T) *datadogExporter {
+	cfg := &Config{}
+	cfg.InitDefaults()
 	exp := &datadogExporter{
 		logger:    zaptest.NewLogger(t),
 		buildInfo: component.NewDefaultBuildInfo(),
-		config:    &Config{},
+		config:    cfg,
 	}
 	_ = exp.Start(context.Background(), componenttest.NewNopHost())
 	return exp

@@ -17,13 +17,28 @@ package datadoglogexporter
 import (
 	"errors"
 
+	semconv "go.opentelemetry.io/collector/model/semconv/v1.6.1"
+
 	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/exporter/exporterhelper"
+)
+
+const (
+	AttributeHost               string = "host"
+	AttributeLogName            string = "log.name"
+	AttributeServiceType        string = "service.type"
+	AttributeFileName           string = "file.name"
+	AttributeFileNameUnderscore string = "file_name"
 )
 
 var (
 	errUnsetURL    = errors.New("URL is not set")
 	errUnsetAPIKey = errors.New("APIKey is not set")
+
+	DefaultHostnameFrom = []string{semconv.AttributeHostName, AttributeHost}
+	DefaultSourceFrom   = []string{AttributeServiceType, semconv.AttributeServiceName, AttributeLogName}
+	DefaultServiceFrom  = []string{semconv.AttributeServiceName, AttributeLogName, semconv.AttributeK8SContainerName, semconv.AttributeK8SPodName}
+	DefaultFileNameFrom = []string{AttributeFileName, AttributeFileNameUnderscore}
 )
 
 type Config struct {
@@ -37,13 +52,11 @@ type Config struct {
 	URL string `mapstructure:"url"`
 	// https://docs.datadoghq.com/account_management/api-app-keys/
 	APIKey string `mapstructure:"api_key"`
-	Source string `mapstructure:"source"`
 
-	TagOperations   []Tag   `mapstructure:"tag_operations"`
-	LabelOperations []Label `mapstructure:"label_operations"`
-
-	ServiceDetect []DetectOperation `mapstructure:"service_detect"`
-	SourceDetect  []DetectOperation `mapstructure:"source_detect"`
+	HostnameFrom    []string `mapstructure:"hostname_from"`
+	SourceFrom      []string `mapstructure:"source_from"`
+	ServiceNameFrom []string `mapstructure:"service_from"`
+	FileNameFrom    []string `mapstructure:"filename_from"`
 }
 
 func (config Config) Validate() error {
@@ -56,20 +69,17 @@ func (config Config) Validate() error {
 	return nil
 }
 
-type Tag struct {
-	From string `mapstructure:"from"`
-	To   string `mapstructure:"to"`
-}
-
-type Label struct {
-	Operation string `mapstructure:"operation"`
-	From      string `mapstructure:"from"`
-	To        string `mapstructure:"to"`
-}
-
-type DetectOperation struct {
-	Operation string `mapstructure:"operation"`
-	Name      string `mapstructure:"name"`
-	Field     string `mapstructure:"field"`
-	Equals    string `mapstructure:"equals"`
+func (config *Config) InitDefaults() {
+	if len(config.HostnameFrom) == 0 {
+		config.HostnameFrom = DefaultHostnameFrom
+	}
+	if len(config.SourceFrom) == 0 {
+		config.SourceFrom = DefaultSourceFrom
+	}
+	if len(config.ServiceNameFrom) == 0 {
+		config.ServiceNameFrom = DefaultServiceFrom
+	}
+	if len(config.FileNameFrom) == 0 {
+		config.FileNameFrom = DefaultFileNameFrom
+	}
 }

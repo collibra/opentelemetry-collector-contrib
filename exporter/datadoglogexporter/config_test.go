@@ -39,7 +39,56 @@ func TestConfig_Validate(t *testing.T) {
 				APIKey: tt.fields.APIKey,
 			}
 			gotErr := config.Validate()
-			assert.Equal(t, gotErr, tt.wantErr)
+			assert.Equal(t, tt.wantErr, gotErr)
+		})
+	}
+}
+
+func TestConfig_InitDefaults(t *testing.T) {
+	tests := []struct {
+		name   string
+		config Config
+		want   Config
+	}{
+		{
+			name:   "Empty config",
+			config: Config{},
+			want: Config{
+				HostnameFrom:    DefaultHostnameFrom,
+				SourceFrom:      DefaultSourceFrom,
+				ServiceNameFrom: DefaultServiceFrom,
+				FileNameFrom:    DefaultFileNameFrom,
+			},
+		},
+		{
+			name: "Empty arrays",
+			want: Config{
+				HostnameFrom:    DefaultHostnameFrom,
+				SourceFrom:      DefaultSourceFrom,
+				ServiceNameFrom: DefaultServiceFrom,
+				FileNameFrom:    DefaultFileNameFrom,
+			},
+		},
+		{
+			name: "Not empty",
+			config: Config{
+				HostnameFrom:    []string{"a"},
+				SourceFrom:      []string{"b"},
+				ServiceNameFrom: []string{"c"},
+				FileNameFrom:    []string{"d"},
+			},
+			want: Config{
+				HostnameFrom:    []string{"a"},
+				SourceFrom:      []string{"b"},
+				ServiceNameFrom: []string{"c"},
+				FileNameFrom:    []string{"d"},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.config.InitDefaults()
+			assert.Equal(t, tt.config, tt.want)
 		})
 	}
 }
