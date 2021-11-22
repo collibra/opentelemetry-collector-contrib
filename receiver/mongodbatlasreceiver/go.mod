@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/mongodb-forks/digest v1.0.3
-	go.mongodb.org/atlas v0.13.0
+	go.mongodb.org/atlas v0.14.0
 	go.opentelemetry.io/collector v0.37.1-0.20211015233822-bd87fb628058
 	go.opentelemetry.io/collector/model v0.37.1-0.20211015233822-bd87fb628058
 	go.uber.org/zap v1.19.1
