@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -46,7 +46,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -85,7 +85,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -127,7 +127,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -161,7 +161,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -196,7 +196,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -230,7 +230,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -281,7 +281,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -416,7 +416,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
@@ -475,7 +475,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Setup Go
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v2.1.5
         with:
           go-version: 1.17
       - name: Setup Go Environment
