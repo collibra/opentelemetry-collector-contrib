@@ -3,7 +3,7 @@ module github.com/open-telemetry/opentelemetry-collector-contrib/exporter/awspro
 go 1.17
 
 require (
-	github.com/aws/aws-sdk-go v1.41.5
+	github.com/aws/aws-sdk-go v1.42.25
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusremotewriteexporter v0.37.1
 	github.com/stretchr/testify v1.7.0
 	go.opentelemetry.io/collector v0.37.1-0.20211015233822-bd87fb628058
@@ -27,6 +27,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/common v0.31.1 // indirect
 	github.com/prometheus/prometheus v1.8.2-0.20210621150501-ff58416a0b02 // indirect
+	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/rs/cors v1.8.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/tidwall/gjson v1.8.1 // indirect
@@ -44,7 +45,7 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.19.1 // indirect
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
+	golang.org/x/net v0.0.0-20211209124913-491a49abca63 // indirect
 	golang.org/x/sys v0.0.0-20210816074244-15123e1e1f71 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/genproto v0.0.0-20210604141403-392c879c8b08 // indirect
