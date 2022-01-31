@@ -8,8 +8,8 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib v0.42.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/resourcetotelemetry v0.42.0
 	github.com/stretchr/testify v1.7.0
-	go.opentelemetry.io/collector v0.42.0
-	go.opentelemetry.io/collector/model v0.42.0
+	go.opentelemetry.io/collector v0.43.1
+	go.opentelemetry.io/collector/model v0.43.1
 	golang.org/x/mod v0.5.1
 )
 
@@ -156,7 +156,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
-	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/klauspost/compress v1.14.1 // indirect
 	github.com/knadh/koanf v1.4.0 // indirect
 	github.com/leoluk/perflib_exporter v0.1.0 // indirect
 	github.com/linode/linodego v0.28.5 // indirect
@@ -181,7 +181,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mongodb-forks/digest v1.0.3 // indirect
-	github.com/mostynb/go-grpc-compression v1.1.15 // indirect
+	github.com/mostynb/go-grpc-compression v1.1.16 // indirect
 	github.com/mrunalp/fileutils v0.5.0 // indirect
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
 	github.com/newrelic/newrelic-telemetry-sdk-go v0.8.1 // indirect
