@@ -9,7 +9,7 @@ require (
 	github.com/spf13/cast v1.4.1
 	github.com/stretchr/testify v1.7.0
 	go.opentelemetry.io/collector v0.42.0
-	go.opentelemetry.io/collector/model v0.42.0
+	go.opentelemetry.io/collector/model v0.43.1
 	google.golang.org/protobuf v1.27.1
 )
 
