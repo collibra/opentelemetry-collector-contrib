@@ -10,8 +10,8 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/aws/ecsutil v0.42.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/opencensus v0.42.0
 	github.com/stretchr/testify v1.7.0
-	go.opentelemetry.io/collector v0.42.0
-	go.opentelemetry.io/collector/model v0.42.0
+	go.opentelemetry.io/collector v0.44.0
+	go.opentelemetry.io/collector/model v0.44.0
 	go.uber.org/multierr v1.7.0
 	go.uber.org/zap v1.20.0
 )
@@ -29,7 +29,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
-	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/klauspost/compress v1.14.2 // indirect
 	github.com/knadh/koanf v1.4.0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
@@ -53,9 +53,8 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f // indirect
 	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect
-	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20211221195035-429b39de9b1c // indirect
-	google.golang.org/grpc v1.43.0 // indirect
+	google.golang.org/grpc v1.44.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
