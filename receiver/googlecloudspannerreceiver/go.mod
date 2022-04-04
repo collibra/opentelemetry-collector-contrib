@@ -4,9 +4,9 @@ go 1.17
 
 require (
 	cloud.google.com/go/spanner v1.29.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	go.opentelemetry.io/collector v0.42.0
-	go.opentelemetry.io/collector/model v0.42.0
+	go.opentelemetry.io/collector/model v0.48.0
 	go.uber.org/zap v1.20.0
 	google.golang.org/api v0.64.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
@@ -15,7 +15,7 @@ require (
 
 require (
 	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb
-	google.golang.org/grpc v1.43.0
+	google.golang.org/grpc v1.45.0
 )
 
 require (
@@ -64,6 +64,6 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
