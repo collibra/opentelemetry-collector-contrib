@@ -6,9 +6,9 @@ require (
 	github.com/aws/aws-sdk-go v1.42.30
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/jaeger v0.42.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/zipkin v0.42.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	go.opentelemetry.io/collector v0.42.0
-	go.opentelemetry.io/collector/model v0.42.0
+	go.opentelemetry.io/collector/model v0.49.0
 	go.uber.org/zap v1.20.0
 )
 
@@ -38,11 +38,12 @@ require (
 	github.com/uber/jaeger-client-go v2.29.1+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	go.opencensus.io v0.23.0 // indirect
+	go.opentelemetry.io/collector/pdata v0.49.0 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/metric v0.26.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
