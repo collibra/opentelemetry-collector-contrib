@@ -8,7 +8,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	go.mongodb.org/atlas v0.14.0
 	go.opentelemetry.io/collector v0.42.0
-	go.opentelemetry.io/collector/model v0.42.0
+	go.opentelemetry.io/collector/model v0.49.0
 	go.uber.org/zap v1.20.0
 )
 
@@ -25,6 +25,7 @@ require (
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
+	go.opentelemetry.io/collector/pdata v0.49.0 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/metric v0.26.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
