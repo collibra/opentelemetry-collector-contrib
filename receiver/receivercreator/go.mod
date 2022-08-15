@@ -12,7 +12,7 @@ require (
 	go.opentelemetry.io/collector v0.42.0
 	go.opentelemetry.io/collector/model v0.42.0
 	go.uber.org/multierr v1.7.0
-	go.uber.org/zap v1.20.0
+	go.uber.org/zap v1.22.0
 )
 
 require (
@@ -35,7 +35,7 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/extension/observer => ../../extension/observer
