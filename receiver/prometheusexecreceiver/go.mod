@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	go.opentelemetry.io/collector v0.42.0
 	go.opentelemetry.io/collector/model v0.42.0
-	go.uber.org/zap v1.20.0
+	go.uber.org/zap v1.22.0
 )
 
 require (
@@ -115,7 +115,7 @@ require (
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/api v0.23.1 // indirect
 	k8s.io/apimachinery v0.23.1 // indirect
 	k8s.io/client-go v0.23.1 // indirect
