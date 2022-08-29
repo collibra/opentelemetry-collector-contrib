@@ -5,10 +5,10 @@ go 1.17
 require (
 	code.cloudfoundry.org/go-loggregator v7.4.0+incompatible
 	github.com/cloudfoundry-incubator/uaago v0.0.0-20190307164349-8136b7bbe76e
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.8.0
 	go.opentelemetry.io/collector v0.42.0
 	go.opentelemetry.io/collector/model v0.42.0
-	go.uber.org/zap v1.20.0
+	go.uber.org/zap v1.23.0
 )
 
 require (
@@ -51,5 +51,5 @@ require (
 	google.golang.org/grpc v1.43.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
