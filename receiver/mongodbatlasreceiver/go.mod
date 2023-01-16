@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/mongodb-forks/digest v1.0.3
 	github.com/pkg/errors v0.9.1
-	go.mongodb.org/atlas v0.14.0
+	go.mongodb.org/atlas v0.21.0
 	go.opentelemetry.io/collector v0.42.0
 	go.opentelemetry.io/collector/model v0.42.0
 	go.uber.org/zap v1.20.0
@@ -21,7 +21,7 @@ require (
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/openlyinc/pointy v1.1.2 // indirect
+	github.com/openlyinc/pointy v1.2.0 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	go.opencensus.io v0.23.0 // indirect
