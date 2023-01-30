@@ -16,7 +16,7 @@ require (
 	go.opentelemetry.io/build-tools/issuegenerator v0.5.0
 	go.opentelemetry.io/build-tools/multimod v0.5.0
 	go.opentelemetry.io/collector/cmd/builder v0.70.1-0.20230125171446-f45a3e42e7d6
-	golang.org/x/tools v0.2.0
+	golang.org/x/tools v0.5.0
 )
 
 require (
