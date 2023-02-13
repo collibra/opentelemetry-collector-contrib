@@ -7,7 +7,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal v0.70.0
 	github.com/stretchr/testify v1.8.1
 	go.opentelemetry.io/collector/pdata v1.0.0-rc4
-	go.opentelemetry.io/collector/semconv v0.70.0
+	go.opentelemetry.io/collector/semconv v0.71.0
 )
 
 require (
