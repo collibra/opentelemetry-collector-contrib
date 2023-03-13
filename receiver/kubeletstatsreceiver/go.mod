@@ -5,10 +5,10 @@ go 1.18
 require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/k8sconfig v0.70.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/kubelet v0.70.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/collector v0.70.0
 	go.opentelemetry.io/collector/component v0.70.0
-	go.opentelemetry.io/collector/confmap v0.70.0
+	go.opentelemetry.io/collector/confmap v0.73.0
 	go.opentelemetry.io/collector/consumer v0.70.0
 	go.opentelemetry.io/collector/pdata v1.0.0-rc4
 	go.opentelemetry.io/collector/semconv v0.70.0
@@ -52,7 +52,7 @@ require (
 	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/collector/featuregate v0.70.0 // indirect
+	go.opentelemetry.io/collector/featuregate v0.73.0 // indirect
 	go.opentelemetry.io/otel v1.11.2 // indirect
 	go.opentelemetry.io/otel/metric v0.34.0 // indirect
 	go.opentelemetry.io/otel/trace v1.11.2 // indirect
