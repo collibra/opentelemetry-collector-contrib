@@ -5,14 +5,14 @@ go 1.18
 require (
 	github.com/Shopify/sarama v1.38.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter v0.70.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/testcontainers/testcontainers-go v0.17.0
 	go.opentelemetry.io/collector v0.70.0
 	go.opentelemetry.io/collector/component v0.70.0
-	go.opentelemetry.io/collector/confmap v0.70.0
+	go.opentelemetry.io/collector/confmap v0.75.0
 	go.opentelemetry.io/collector/consumer v0.70.0
 	go.opentelemetry.io/collector/pdata v1.0.0-rc4
-	go.uber.org/multierr v1.9.0
+	go.uber.org/multierr v1.10.0
 	go.uber.org/zap v1.24.0
 )
 
@@ -76,7 +76,7 @@ require (
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/collector/featuregate v0.70.0 // indirect
+	go.opentelemetry.io/collector/featuregate v0.75.0 // indirect
 	go.opentelemetry.io/collector/semconv v0.70.0 // indirect
 	go.opentelemetry.io/otel v1.11.2 // indirect
 	go.opentelemetry.io/otel/metric v0.34.0 // indirect
