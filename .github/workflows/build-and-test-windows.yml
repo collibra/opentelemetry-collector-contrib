@@ -42,7 +42,7 @@ jobs:
         with:
           api_key: ${{ secrets.FORESIGHT_API_KEY }}
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - if: matrix.group == 'receiver-0'
         name: install IIS
         run: Install-WindowsFeature -name Web-Server -IncludeManagementTools

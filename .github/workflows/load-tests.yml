@@ -29,7 +29,7 @@ jobs:
         with:
           api_key: ${{ secrets.FORESIGHT_API_KEY }}
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
@@ -72,7 +72,7 @@ jobs:
         with:
           api_key: ${{ secrets.FORESIGHT_API_KEY }}
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - run: sudo chmod 0777 -R /opt
       - name: Fluentbit Cache
         id: fluentbit-cache
