@@ -3,16 +3,16 @@ module github.com/open-telemetry/opentelemetry-collector-contrib/exporter/tanzuo
 go 1.18
 
 require (
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.3.1
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal v0.70.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.4
 	github.com/wavefronthq/wavefront-sdk-go v0.11.0
 	go.opentelemetry.io/collector v0.70.0
 	go.opentelemetry.io/collector/component v0.70.0
-	go.opentelemetry.io/collector/pdata v1.0.0-rc4
+	go.opentelemetry.io/collector/pdata v1.0.1
 	go.opentelemetry.io/collector/semconv v0.70.0
 	go.uber.org/atomic v1.10.0
-	go.uber.org/multierr v1.9.0
+	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.24.0
 )
 
@@ -31,7 +31,7 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -52,7 +52,6 @@ require (
 	github.com/prometheus/common v0.39.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/prometheus/statsd_exporter v0.22.7 // indirect
-	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/rs/cors v1.8.3 // indirect
 	github.com/shirou/gopsutil/v3 v3.22.12 // indirect
 	github.com/spf13/cobra v1.6.1 // indirect
@@ -72,13 +71,13 @@ require (
 	go.opentelemetry.io/otel/sdk v1.11.2 // indirect
 	go.opentelemetry.io/otel/sdk/metric v0.34.0 // indirect
 	go.opentelemetry.io/otel/trace v1.11.2 // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/net v0.18.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	gonum.org/v1/gonum v0.12.0 // indirect
-	google.golang.org/genproto v0.0.0-20221118155620-16455021b5e6 // indirect
-	google.golang.org/grpc v1.52.1 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231002182017-d307bd883b97 // indirect
+	google.golang.org/grpc v1.60.1 // indirect
+	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
