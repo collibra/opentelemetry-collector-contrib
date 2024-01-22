@@ -11,7 +11,7 @@ require (
 	github.com/DataDog/gohai v0.0.0-20220718130825-1776f9beb9cc
 	github.com/DataDog/sketches-go v1.4.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v0.34.3-0.20221202192616-0186b89ba914
-	github.com/aws/aws-sdk-go v1.44.186
+	github.com/aws/aws-sdk-go v1.50.0
 	github.com/cenkalti/backoff/v4 v4.2.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/aws/ecsutil v0.70.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal v0.70.0
@@ -168,11 +168,11 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v0.34.0 // indirect
 	go.opentelemetry.io/otel/trace v1.11.2 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.3.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/term v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/term v0.13.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	gonum.org/v1/gonum v0.12.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
