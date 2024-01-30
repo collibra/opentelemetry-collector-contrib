@@ -68,33 +68,13 @@ func (e *errsMux) combine() error {
 	return e.errs.Combine()
 }
 
-type postgreSQLClientFactory interface {
-	getClient(c *Config, database string) (client, error)
-}
-
-type defaultClientFactory struct{}
-
-func (d *defaultClientFactory) getClient(c *Config, database string) (client, error) {
-	return newPostgreSQLClient(postgreSQLConfig{
-		username: c.Username,
-		password: string(c.Password),
-		database: database,
-		tls:      c.TLSClientSetting,
-		address:  c.NetAddr,
-	})
-}
-
-func newPostgreSQLScraper(
-	settings receiver.CreateSettings,
-	config *Config,
-	clientFactory postgreSQLClientFactory,
-) *postgreSQLScraper {
+func newPostgreSQLScraper(settings receiver.CreateSettings, config *Config, clientFactory postgreSQLClientFactory) *postgreSQLScraper {
 	excludes := make(map[string]struct{})
 	for _, db := range config.ExcludeDatabases {
 		excludes[db] = struct{}{}
 	}
-	separateSchemaAttr := separateSchemaAttrGate.IsEnabled()
 
+	separateSchemaAttr := separateSchemaAttrGate.IsEnabled()
 	if !separateSchemaAttr {
 		settings.Logger.Warn(
 			fmt.Sprintf("Feature gate %s is not enabled. Please see the README for more information: %s", separateSchemaAttrID, readmeURL),
@@ -112,6 +92,15 @@ func newPostgreSQLScraper(
 	}
 }
 
+func (p *postgreSQLScraper) shutdown(_ context.Context) error {
+	if p.clientFactory != nil {
+		if err := p.clientFactory.close(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 type dbRetrieval struct {
 	sync.RWMutex
 	activityMap map[databaseName]int64
@@ -121,29 +110,17 @@ type dbRetrieval struct {
 
 // scrape scrapes the metric stats, transforms them and attributes them into a metric slices.
 func (p *postgreSQLScraper) scrape(ctx context.Context) (pmetric.Metrics, error) {
-	databases := p.config.Databases
-	listClient, err := p.clientFactory.getClient(p.config, "")
+	listClient, err := p.clientFactory.getClient(ctx, defaultPostgreSQLDatabase)
 	if err != nil {
-		p.logger.Error("Failed to initialize connection to postgres", zap.Error(err))
+		p.logger.Error("failed to initialize connection to postgres", zap.Error(err))
 		return pmetric.NewMetrics(), err
 	}
 	defer listClient.Close()
 
-	if len(databases) == 0 {
-		dbList, err := listClient.listDatabases(ctx)
-		if err != nil {
-			p.logger.Error("Failed to request list of databases from postgres", zap.Error(err))
-			return pmetric.NewMetrics(), err
-		}
-		databases = dbList
+	databases, err := p.listDatabasesToScrape(ctx, listClient)
+	if err != nil {
+		return pmetric.NewMetrics(), err
 	}
-	var filteredDatabases []string
-	for _, db := range databases {
-		if _, ok := p.excludes[db]; !ok {
-			filteredDatabases = append(filteredDatabases, db)
-		}
-	}
-	databases = filteredDatabases
 
 	now := pcommon.NewTimestampFromTime(time.Now())
 
@@ -156,10 +133,10 @@ func (p *postgreSQLScraper) scrape(ctx context.Context) (pmetric.Metrics, error)
 	p.retrieveDBMetrics(ctx, listClient, databases, r, &errs)
 
 	for _, database := range databases {
-		dbClient, err := p.clientFactory.getClient(p.config, database)
-		if err != nil {
-			errs.add(err)
-			p.logger.Error("Failed to initialize connection to postgres", zap.String("database", database), zap.Error(err))
+		dbClient, dbErr := p.clientFactory.getClient(ctx, database)
+		if dbErr != nil {
+			errs.add(dbErr)
+			p.logger.Error("failed to initialize connection to postgres", zap.String("database", database), zap.Error(dbErr))
 			continue
 		}
 		defer dbClient.Close()
@@ -177,6 +154,27 @@ func (p *postgreSQLScraper) scrape(ctx context.Context) (pmetric.Metrics, error)
 	p.collectDatabaseLocks(ctx, now, listClient, &errs)
 
 	return p.mb.Emit(), errs.combine()
+}
+
+func (p *postgreSQLScraper) listDatabasesToScrape(ctx context.Context, listClient client) ([]string, error) {
+	databases := p.config.Databases
+
+	if len(databases) == 0 {
+		dbList, err := listClient.listDatabases(ctx)
+		if err != nil {
+			p.logger.Error("failed to request list of databases from postgres", zap.Error(err))
+			return nil, err
+		}
+		databases = dbList
+	}
+
+	var filteredDatabases []string
+	for _, db := range databases {
+		if _, ok := p.excludes[db]; !ok {
+			filteredDatabases = append(filteredDatabases, db)
+		}
+	}
+	return filteredDatabases, nil
 }
 
 func (p *postgreSQLScraper) retrieveDBMetrics(
@@ -327,7 +325,7 @@ func (p *postgreSQLScraper) collectDatabaseLocks(
 ) {
 	dbLocks, err := client.getDatabaseLocks(ctx)
 	if err != nil {
-		p.logger.Error("Errors encountered while fetching database locks", zap.Error(err))
+		p.logger.Error("errors encountered while fetching database locks", zap.Error(err))
 		errs.addPartial(err)
 		return
 	}
@@ -418,7 +416,7 @@ func (p *postgreSQLScraper) retrieveDatabaseStats(
 	defer wg.Done()
 	dbStats, err := client.getDatabaseStats(ctx, databases)
 	if err != nil {
-		p.logger.Error("Errors encountered while fetching commits and rollbacks", zap.Error(err))
+		p.logger.Error("errors encountered while fetching commits and rollbacks", zap.Error(err))
 		errs.addPartial(err)
 		return
 	}
@@ -438,7 +436,7 @@ func (p *postgreSQLScraper) retrieveDatabaseSize(
 	defer wg.Done()
 	databaseSizeMetrics, err := client.getDatabaseSize(ctx, databases)
 	if err != nil {
-		p.logger.Error("Errors encountered while fetching database size", zap.Error(err))
+		p.logger.Error("errors encountered while fetching database size", zap.Error(err))
 		errs.addPartial(err)
 		return
 	}

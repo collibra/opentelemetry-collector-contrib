@@ -50,8 +50,15 @@ func createMetricsReceiver(
 ) (receiver.Metrics, error) {
 	cfg := rConf.(*Config)
 
-	ns := newPostgreSQLScraper(params, cfg, &defaultClientFactory{})
-	scraper, err := scraperhelper.NewScraper(metadata.Type, ns.scrape)
+	var clientFactory postgreSQLClientFactory
+	if connectionPoolGate.IsEnabled() {
+		clientFactory = newPooledClientFactory(cfg)
+	} else {
+		clientFactory = newDefaultClientFactory(cfg)
+	}
+
+	ns := newPostgreSQLScraper(params, cfg, clientFactory)
+	scraper, err := scraperhelper.NewScraper(metadata.Type, ns.scrape, scraperhelper.WithShutdown(ns.shutdown))
 	if err != nil {
 		return nil, err
 	}

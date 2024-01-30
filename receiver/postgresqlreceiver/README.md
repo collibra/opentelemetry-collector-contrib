@@ -21,7 +21,7 @@ This receiver queries the PostgreSQL [statistics collector](https://www.postgres
 
 ## Prerequisites
 
-This receiver supports PostgreSQL versions 9.6+
+This receiver supports PostgreSQL versions 12+
 
 The monitoring user must be granted `SELECT` on `pg_stat_database`.
 
