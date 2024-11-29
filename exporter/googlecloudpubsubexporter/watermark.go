@@ -35,9 +35,9 @@ type collector struct {
 func (c *collector) earliest(timestamp pcommon.Timestamp) bool {
 	t := timestamp.AsTime()
 	if t.Before(c.calculatedTime) {
-		min := c.processingTime.Add(-c.allowedDrift)
-		if t.Before(min) {
-			c.calculatedTime = min
+		minAllowed := c.processingTime.Add(-c.allowedDrift)
+		if t.Before(minAllowed) {
+			c.calculatedTime = minAllowed
 			return true
 		}
 		c.calculatedTime = t
@@ -52,13 +52,13 @@ func currentMetricsWatermark(_ pmetric.Metrics, processingTime time.Time, _ time
 
 // function that traverse the metric data, and returns the earliest timestamp (within limits of the allowedDrift)
 func earliestMetricsWatermark(metrics pmetric.Metrics, processingTime time.Time, allowedDrift time.Duration) time.Time {
-	collector := &collector{
+	c := &collector{
 		processingTime: processingTime,
 		allowedDrift:   allowedDrift,
 		calculatedTime: processingTime,
 	}
-	traverseMetrics(metrics, collector.earliest)
-	return collector.calculatedTime
+	traverseMetrics(metrics, c.earliest)
+	return c.calculatedTime
 }
 
 // traverse the metric data, with a collectFunc
